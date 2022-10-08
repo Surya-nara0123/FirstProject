@@ -105,7 +105,7 @@ class Game:
                         arr[i][j] = 'X'
                         qwerty += 1
                         score = self.minimax(arr, a, b, depth + 1, False)
-                        print(qwerty, end="  ")
+                        #print(qwerty, end="  ")
                         arr[i][j] = ''
                         bestScore = max((score, bestScore))
                         a = max((a, score))
@@ -120,7 +120,7 @@ class Game:
                         arr[i][j] = 'O'
                         qwerty += 1
                         score = self.minimax(arr, a, b, depth+1, True)
-                        print(qwerty, end="  ")
+                        #print(qwerty, end="  ")
                         arr[i][j] = ''
                         bestScore = min((score, bestScore))
                         a = max((a, score))
@@ -143,7 +143,7 @@ class Game:
                                         self.board[i][j] = 'X'
                                         if self.checkWin(self.board) is None:
                                             self.getMove()
-                                            print(qwerty)
+                                            #print(qwerty)
                                     else:
                                         print(self.checkWin(self.board))
 
@@ -165,4 +165,3 @@ def game():
     pyg.display.set_caption('TicTacToe')
     newGame = Game(600, 600)
     newGame.main()
-game()
