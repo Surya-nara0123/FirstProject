@@ -4,13 +4,14 @@ from dinoAI import game as g1
 from dino import game as g2
 from FlappyBird import game as g3
 from FlappyBirdAI import game as g4
-from tictactoe import game
+from SuryaAssets import tictactoe
+game = tictactoe.game
 
 pyg.init()
 SCREEN_HEIGHT = 900
 SCREEN_WIDTH = 900
 WINDOW = pyg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-icon = pyg.image.load('My project.png')
+icon = pyg.image.load('SuryaAssets/My project.png')
 pyg.display.set_icon(icon)
 pyg.display.set_caption('Main Menu')
 
@@ -24,19 +25,19 @@ def mainMenu():
     run = True
     rect = [pyg.Rect(100, 50, 120, 80),
             pyg.Rect(500, 50, 120, 80),
-            pyg.Rect(100, 350, 200, 100),
-            pyg.Rect(500, 350, 200, 100),
+            pyg.Rect(100, 350, 100, 100),
+            pyg.Rect(500, 350, 100, 100),
             pyg.Rect(300, 650, 200, 200)
             ]
 
     pic = []
     for j, box in enumerate(rect):
         if j < 2:
-            pic.append(pyg.transform.scale(pyg.image.load('TrexIcon.png'), box.size))
+            pic.append(pyg.transform.scale(pyg.image.load('SuryaAssets/TrexIcon.png'), box.size))
         elif j < 4:
-            pic.append(pyg.transform.scale(pyg.image.load('flappyPic.png'), box.size))
+            pic.append(pyg.transform.scale(pyg.image.load('SuryaAssets/Flappy img.png'), box.size))
         else:
-            pic.append(pyg.transform.scale(pyg.image.load('tictactoePic.png'), box.size))
+            pic.append(pyg.transform.scale(pyg.image.load('SuryaAssets/tictactoePic.png'), box.size))
     while run:
 
         WINDOW.fill((220, 255, 220))
