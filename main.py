@@ -10,6 +10,8 @@ pyg.init()
 SCREEN_HEIGHT = 900
 SCREEN_WIDTH = 900
 WINDOW = pyg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+icon = pyg.image.load('My project.png')
+pyg.display.set_icon(icon)
 pyg.display.set_caption('Main Menu')
 
 FONT = pyg.font.Font('freesansbold.ttf', 20)
@@ -30,7 +32,7 @@ def mainMenu():
     pic = []
     for j, box in enumerate(rect):
         if j < 2:
-            pic.append(pyg.transform.scale(pyg.image.load('dinoPic.png'), box.size))
+            pic.append(pyg.transform.scale(pyg.image.load('TrexIcon.png'), box.size))
         elif j < 4:
             pic.append(pyg.transform.scale(pyg.image.load('flappyPic.png'), box.size))
         else:
