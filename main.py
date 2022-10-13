@@ -22,8 +22,8 @@ def mainMenu():
     clock = pyg.time.Clock()
     global run
     run = True
-    rect = [pyg.Rect(100, 50, 200, 100),
-            pyg.Rect(500, 50, 200, 100),
+    rect = [pyg.Rect(100, 50, 120, 80),
+            pyg.Rect(500, 50, 120, 80),
             pyg.Rect(100, 350, 200, 100),
             pyg.Rect(500, 350, 200, 100),
             pyg.Rect(300, 650, 200, 200)
@@ -32,7 +32,7 @@ def mainMenu():
     pic = []
     for j, box in enumerate(rect):
         if j < 2:
-            pic.append(pyg.transform.scale(pyg.image.load('dinoPic.png'), box.size))
+            pic.append(pyg.transform.scale(pyg.image.load('TrexIcon.png'), box.size))
         elif j < 4:
             pic.append(pyg.transform.scale(pyg.image.load('flappyPic.png'), box.size))
         else:
