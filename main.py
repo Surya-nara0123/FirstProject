@@ -8,8 +8,8 @@ from SuryaAssets import tictactoe
 game = tictactoe.game
 
 pyg.init()
-SCREEN_HEIGHT = 900
-SCREEN_WIDTH = 900
+SCREEN_HEIGHT = 600
+SCREEN_WIDTH = 600
 WINDOW = pyg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 icon = pyg.image.load('SuryaAssets/My project.png')
 pyg.display.set_icon(icon)
@@ -59,7 +59,6 @@ def mainMenu():
             if event.type == pyg.QUIT:
                 run = False
                 pyg.quit()
-                sys.exit()
 
             elif event.type == pyg.MOUSEBUTTONDOWN:
                 for j, i in enumerate(rect):
