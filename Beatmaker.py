@@ -1,3 +1,7 @@
+import enum
+import random
+
+
 class BeatSequencer:
     def beatmakerNode(self):
         import pygame as pyg
@@ -7,11 +11,28 @@ class BeatSequencer:
         pyg.init()
         window = pyg.display.set_mode((800, 600))
         run = True
+        rectList = [
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ]
+        for j, list in enumerate(rectList):
+            for i in range(10):
+                list.append(pyg.Rect((window.get_width()-100)/6*(i+1)-15, (window.get_height()/6)*j,(window.get_width()-100)/6, (window.get_height()/6)))
         while run:
             window.fill((0,0,0))
+            pyg.draw.rect(window, (80, 80, 80), (0, 0, 100, window.get_height()))
+            for i in rectList:
+                for j in i:
+                    pyg.draw.rect(window, (80, 80, 80), j, 4)
             for event in pyg.event.get():
                 if event.type == pyg.QUIT:
                     run = False
+
+            pyg.display.update()
     def menu(self):
         import pygame as pyg
         import sys
@@ -42,4 +63,4 @@ class BeatSequencer:
 
 
 newwindow = BeatSequencer()
-newwindow.menu()
+newwindow.beatmakerNode()
