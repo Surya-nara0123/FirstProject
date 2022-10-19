@@ -1,11 +1,24 @@
-import enum
 import random
+import pygame as pyg
+import sys
+import mysql.connector
+print("hello")
+mydb = mysql.connector.connect(host="localhost", password="S********123")
+print("hello")
 
 
 class BeatSequencer:
+    def database(self):
+        cursor = mydb.cursor()
+        cursor.execute("show databases")
+        for x in cursor:
+            print(x)
+        cursor.execute("use BeatMakerSettings")
+        cursor.execute("select * from options")
+        for x in cursor:
+            print(x)
+
     def beatmakerNode(self):
-        import pygame as pyg
-        import sys
         icon = pyg.image.load("SuryaAssets/DrumsLogo.png")
         pyg.display.set_icon(icon)
         pyg.init()
@@ -53,8 +66,6 @@ class BeatSequencer:
 
             pyg.display.update()
     def menu(self):
-        import pygame as pyg
-        import sys
 
         pyg.init()
         window = pyg.display.set_mode((800, 600))
