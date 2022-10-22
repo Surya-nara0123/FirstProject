@@ -2,12 +2,15 @@ import random
 import pygame as pyg
 import sys
 import mysql.connector
-print("hello")
 mydb = mysql.connector.connect(host="localhost", password="S********123")
-print("hello")
 
 
 class BeatSequencer:
+    def __init__(self):
+        cursor = mydb.cursor()
+        cursor.execute("use BeatMakerSettings")
+        cursor.execute("select * from options")
+        self.options = cursor.fetchall()
     def database(self):
         cursor = mydb.cursor()
         cursor.execute("show databases")
@@ -66,7 +69,6 @@ class BeatSequencer:
 
             pyg.display.update()
     def menu(self):
-
         pyg.init()
         window = pyg.display.set_mode((800, 600))
         background = pyg.image.load("SuryaAssets/BeatSequencerMenu.png")
@@ -89,8 +91,19 @@ class BeatSequencer:
                     pyg.quit()
                     pyg.display.quit()
                     sys.exit()
+                elif event.type == pyg.MOUSEBUTTONDOWN:
+                    if rectList[0].collidepoint(pyg.mouse.get_pos()):
+                        self.beatmakerNode()
+                    elif rectList[1].collidepoint(pyg.mouse.get_pos()):
+                        run1 = True
+                        while run1:
+                            pyg.draw.rect(window, (0, 0, 0, 50), (0, 0, window.get_width(), window.get_height()))
+                            keys = pyg.key.get_pressed()
+                            if keys[pyg.K_ESCAPE]:
+                                run1 = False
+                            pyg.display.update()
             pyg.display.update()
 
 
 newwindow = BeatSequencer()
-newwindow.beatmakerNode()
+newwindow.menu()
