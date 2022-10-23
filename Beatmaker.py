@@ -7,12 +7,13 @@ mydb = mysql.connector.connect(host="localhost", password="S********123")
 
 class BeatSequencer:
     def __init__(self):
-        cursor = mydb.cursor()
-        cursor.execute("use BeatMakerSettings")
-        cursor.execute("select * from options")
-        self.options = cursor.fetchall()
+        self.cursor = mydb.cursor()
+        self.cursor.execute("use BeatMakerSettings")
+        self.cursor.execute("select * from options")
+        self.options = self.cursor.fetchall()
     def database(self):
         cursor = mydb.cursor()
+        pyg.init()
         cursor.execute("show databases")
         for x in cursor:
             print(x)
@@ -20,6 +21,9 @@ class BeatSequencer:
         cursor.execute("select * from options")
         for x in cursor:
             print(x)
+        font = pyg.font.SysFont("Arial Black", 50, True, False)
+
+        print(font)
 
     def beatmakerNode(self):
         icon = pyg.image.load("SuryaAssets/DrumsLogo.png")
@@ -110,7 +114,29 @@ class BeatSequencer:
                 key = pyg.key.get_pressed()
                 if key[pyg.K_ESCAPE]:
                     run1= False
-                
+                font = pyg.font.SysFont("Arial Black", 20, True, False)
+                rectList1 = []
+                for i in range(len(self.options)):
+                    rectList1.append(pyg.Rect(4*window.get_width()/6, (i+2)*(window.get_height()/6), 100, 50 ))
+                heading = font.render("Controls and Settings", False, (255, 255, 255))
+                window.blit(heading,(window.get_width()/3, window.get_height()/6))
+                heading = font.render("Back----->Escape", False, (255, 255, 255))
+                window.blit(heading,(0, 0))
+                for i, (name, setting) in enumerate(self.options):
+                    heading = font.render(name, False, (255, 255, 255))
+                    window.blit(heading,(window.get_width()/6, (i+2)*(window.get_height()/6)))
+                    heading = font.render(setting, False, (255, 255, 255))
+                    window.blit(heading,rectList1[i])
+                for event in pyg.event.get():
+                    if event.type == pyg.MOUSEBUTTONDOWN:
+                        for i, rect in enumerate(rectList1):
+                            if rect.collidepoint(pyg.mouse.get_pos()):
+                                self.cursor.execute(f"update options set setting  = '' where optionName = '{self.options[i][0]}';")
+                                self.cursor.execute("select * from options")
+                                self.options = self.cursor.fetchall()
+                                flag = i+1
+
+                    
             pyg.display.update()
 
 
