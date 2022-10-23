@@ -81,6 +81,7 @@ class BeatSequencer:
             pyg.Rect(63, 482, 235, 91)
         ]
         run = True
+        run1 = False
         while run:
             window.fill((255,255,255))
             window.blit(background, (0, 0))
@@ -93,15 +94,23 @@ class BeatSequencer:
                     sys.exit()
                 elif event.type == pyg.MOUSEBUTTONDOWN:
                     if rectList[0].collidepoint(pyg.mouse.get_pos()):
-                        self.beatmakerNode()
+                        if run1 == False:
+                            self.beatmakerNode()
                     elif rectList[1].collidepoint(pyg.mouse.get_pos()):
-                        run1 = True
-                        while run1:
-                            pyg.draw.rect(window, (0, 0, 0, 50), (0, 0, window.get_width(), window.get_height()))
-                            keys = pyg.key.get_pressed()
-                            if keys[pyg.K_ESCAPE]:
-                                run1 = False
-                            pyg.display.update()
+                        if run1 == False:
+                            run1 = True
+                    elif rectList[2].collidepoint(pyg.mouse.get_pos()):
+                        if run1 == False:
+                            run = False
+            if run1 == True:
+                s = pyg.Surface(window.get_size())
+                s.set_alpha(200)
+                s.fill((0, 0, 0))
+                window.blit(s, (0, 0))
+                key = pyg.key.get_pressed()
+                if key[pyg.K_ESCAPE]:
+                    run1= False
+                
             pyg.display.update()
 
 
