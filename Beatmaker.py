@@ -1,8 +1,9 @@
-import random
-from typing import Text
+from enum import Flag
+from re import T
 import pygame as pyg
 import sys
 import mysql.connector
+import playsound as ps
 mydb = mysql.connector.connect(host="localhost", password="S********123")
 
 
@@ -27,19 +28,33 @@ class BeatSequencer:
         print(font)
 
     def beatmakerNode(self):
+        no_beats = int(self.options[1][-1])
+        pyg.mixer.init()
+        play1 = pyg.mixer.music.load("SuryaAssets/kick.WAV")
+        play2 = pyg.mixer.music.load("SuryaAssets/snare.WAV")
+        play3 = pyg.mixer.music.load("SuryaAssets/hi hat.WAV")
+        play4 = pyg.mixer.music.load("SuryaAssets/clap.WAV")
+        play5 = pyg.mixer.music.load("SuryaAssets/crash.WAV")
+        play6 = pyg.mixer.music.load("SuryaAssets/silent.wav")
         icon = pyg.image.load("SuryaAssets/DrumsLogo.png")
         pyg.display.set_icon(icon)
         pyg.init()
+        width = 800
+        height = 600
         window = pyg.display.set_mode((800, 600))
         run = True
+        clock = pyg.time.Clock()
         flagList = [
-            [False, False, False, False, False, False],
-            [False, False, False, False, False, False],
-            [False, False, False, False, False, False],
-            [False, False, False, False, False, False],
-            [False, False, False, False, False, False],
-            [False, False, False, False, False, False]
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
         ]
+        for j, list in enumerate(flagList):
+            for i in range(no_beats):
+                list.append(False)
         rectList = [
             [],
             [],
@@ -49,11 +64,16 @@ class BeatSequencer:
             []
         ]
         for j, list in enumerate(rectList):
-            for i in range(6):
-                list.append(pyg.Rect((window.get_width()-100)/6*(i+1)-10, (window.get_height()/6)*j+5,(window.get_width()-100)/6-5, (window.get_height()/6)-5))
+            for i in range(no_beats):
+                list.append(pyg.Rect(105 + ((width-105)/no_beats) * (i) , (height/5) * (j), width/no_beats-20, height/5-5))
         run1 = False
         flag = False
+        play = False
         user_text = ''
+        bmp = int(self.options[0][-1])
+        beats = 60000//bmp
+        pyg.time.set_timer(1, beats)
+        counter = 0
         while run:
             window.fill((0,0,0))
             pyg.draw.rect(window, (80, 80, 80), (0, 0, 100, window.get_height()))
@@ -64,6 +84,15 @@ class BeatSequencer:
                     else:
                         pyg.draw.rect(window, (80, 180, 80), j, 0, 10)
             for event in pyg.event.get():
+                if event.type == 1:
+                    if play:
+                        for i in range(no_beats):
+                            if flagList[0][i] == True:
+                                pass
+                            else:
+                                pass
+                                    
+                    
                 if event.type == pyg.QUIT:
                     run = False
                 if event.type == pyg.MOUSEBUTTONDOWN:
@@ -87,6 +116,12 @@ class BeatSequencer:
                     text = eval('pyg.K_'+self.options[-1][-1])
                     if event.key == text:
                         run1 = True
+                    text = eval('pyg.K_'+self.options[-2][-1])
+                    if event.key == text:
+                        if play:
+                            play = False
+                        else:
+                            play = True
                 if run1:
                     if flag:
                         if flag == 1:
@@ -158,6 +193,7 @@ class BeatSequencer:
                 key = pyg.key.get_pressed()
                 if key[pyg.K_ESCAPE]:
                     run1= False
+                    pyg.time.set_timer(1, beats)
                 font = pyg.font.SysFont("Arial Black", 20, True, False)
                 rectList1 = []
                 for i in range(len(self.options)):
@@ -176,9 +212,9 @@ class BeatSequencer:
                     text = font.render(user_text, True, (255, 255, 255))
                     pyg.draw.rect(window, (255, 255, 255), rectList1[flag-1], 4)
                     window.blit(text, rectList1[flag-1])
-
-            
-             
+            if run1 == False:
+                bmp = int(self.options[0][-1])
+                beats = 60000//bmp
             pyg.display.update()
     def menu(self):
         pyg.init()
@@ -199,7 +235,6 @@ class BeatSequencer:
         while run:
             window.fill((255,255,255))
             window.blit(background, (0, 0))
-            #mixer.music.play()
             for event in pyg.event.get():
                 if event.type == pyg.QUIT:
                     run = False
