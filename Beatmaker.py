@@ -8,25 +8,18 @@ mydb = mysql.connector.connect(host="localhost", password="S********123")
 
 
 class BeatSequencer:
+
+
+    # loading the contents of the database as a constructor
     def __init__(self):
         self.cursor = mydb.cursor()
         self.cursor.execute("use BeatMakerSettings")
         self.cursor.execute("select * from options")
         self.options = self.cursor.fetchall()
-    def database(self):
-        cursor = mydb.cursor()
-        pyg.init()
-        cursor.execute("show databases")
-        for x in cursor:
-            print(x)
-        cursor.execute("use BeatMakerSettings")
-        cursor.execute("select * from options")
-        for x in cursor:
-            print(x)
-        font = pyg.font.SysFont("Arial Black", 50, True, False)
+        self.menu()
+    
 
-        print(font)
-
+    # Beat Sequencer part of the app
     def beatmakerNode(self):
         #initializing the modules
         pyg.mixer.init()
@@ -89,19 +82,52 @@ class BeatSequencer:
 
         # Starting The main loop
         while run:
+            
+            # This What is drawn for every iteration of the loop
+            window.fill((0,0,0))
             pyg.draw.rect(window, (80, 80, 80), (0, 0, 100, window.get_height()))
             for i in rectList:
                 for j in i:
                     if flagList[rectList.index(i)][i.index(j)] == False:
                         pyg.draw.rect(window, (80, 80, 80), j, 0, 5)
                     else:
-                        pyg.draw.rect(window, (80, 180, 80), j, 0, 5)
+                        pyg.draw.rect(window, (0, 255, 80), j, 0, 5)
             for i in rectList:
                 pyg.draw.rect(window, (0, 255, 255),i[active_beat], 3)
+
+            
+            # This what is displayed when the options window in opened
+            if run1 == True:
+                s = pyg.Surface(window.get_size())
+                s.set_alpha(200)
+                s.fill((0, 0, 0))
+                window.blit(s, (0, 0))
+                key = pyg.key.get_pressed()
+                if key[pyg.K_ESCAPE]:
+                    run1= False
+                font = pyg.font.SysFont("Arial Black", 20, True, False)
+                rectList1 = []
+                for i in range(len(self.options)):
+                    rectList1.append(pyg.Rect(4*window.get_width()/6, (i+2)*(window.get_height()/6), 100, 50 ))
+                heading = font.render("Controls and Settings", False, (255, 255, 255))
+                window.blit(heading,(window.get_width()/3, window.get_height()/6))
+                heading = font.render("Back----->Escape", False, (255, 255, 255))
+                window.blit(heading,(0, 0))
+                for i, (name, setting) in enumerate(self.options):
+                    heading = font.render(name, False, (255, 255, 255))
+                    window.blit(heading,(window.get_width()/6, (i+2)*(window.get_height()/6)))
+                    heading = font.render(setting, False, (255, 255, 255))
+                    window.blit(heading,rectList1[i])
+
+                if flag != 0:
+                    text = font.render(user_text, True, (255, 255, 255))
+                    pyg.draw.rect(window, (255, 255, 255), rectList1[flag-1], 4)
+                    window.blit(text, rectList1[flag-1])
             pyg.display.update()
             clock.tick(60)
-            window.fill((0,0,0))
             
+            
+            # Controlling the beats
             if beat_changed:
                 for i in range(len(flagList)):
                     if flagList[i][active_beat]:
@@ -123,10 +149,15 @@ class BeatSequencer:
                         active_beat = 0
                         beat_changed = True
             
+
+            # Event Manager
             for event in pyg.event.get():
+                # Statement to Close the window when we want to
                 if event.type == pyg.QUIT:
                     run = False
+                # These commands are executed when we click our mouse
                 if event.type == pyg.MOUSEBUTTONDOWN:
+                    # If click our mouse when we are not in the options window
                     if run1 == False:
                         for i in rectList:
                             for j in i:
@@ -136,6 +167,7 @@ class BeatSequencer:
                                     else:
                                         flagList[rectList.index(i)][i.index(j)] = False
                     
+                    # If click our mouse when we are in the options window                    
                     elif run1:
                         for i, rect in enumerate(rectList1):
                             if rect.collidepoint(pyg.mouse.get_pos()):
@@ -143,6 +175,8 @@ class BeatSequencer:
                                 self.cursor.execute("select * from options")
                                 self.options = self.cursor.fetchall()
                                 flag = i+1
+
+                # If we press any thing ok our key board when the options window is not open
                 elif event.type == pyg.KEYDOWN:
                     text = eval('pyg.K_'+self.options[-1][-1])
                     if event.key == text:
@@ -154,6 +188,7 @@ class BeatSequencer:
                         else:
                             play = True
                             beat_changed = True
+                # If we press any thing ok our key board when the options window is not open
                 if run1:
                     if flag:
                         if flag == 1:
@@ -217,35 +252,10 @@ class BeatSequencer:
                                     if not user_text.isalpha() and user_text.isdigit():
                                         user_text = user_text[:-1]
 
-            
-            if run1 == True:
-                s = pyg.Surface(window.get_size())
-                s.set_alpha(200)
-                s.fill((0, 0, 0))
-                window.blit(s, (0, 0))
-                key = pyg.key.get_pressed()
-                if key[pyg.K_ESCAPE]:
-                    run1= False
-                font = pyg.font.SysFont("Arial Black", 20, True, False)
-                rectList1 = []
-                for i in range(len(self.options)):
-                    rectList1.append(pyg.Rect(4*window.get_width()/6, (i+2)*(window.get_height()/6), 100, 50 ))
-                heading = font.render("Controls and Settings", False, (255, 255, 255))
-                window.blit(heading,(window.get_width()/3, window.get_height()/6))
-                heading = font.render("Back----->Escape", False, (255, 255, 255))
-                window.blit(heading,(0, 0))
-                for i, (name, setting) in enumerate(self.options):
-                    heading = font.render(name, False, (255, 255, 255))
-                    window.blit(heading,(window.get_width()/6, (i+2)*(window.get_height()/6)))
-                    heading = font.render(setting, False, (255, 255, 255))
-                    window.blit(heading,rectList1[i])
 
-                if flag != 0:
-                    text = font.render(user_text, True, (255, 255, 255))
-                    pyg.draw.rect(window, (255, 255, 255), rectList1[flag-1], 4)
-                    window.blit(text, rectList1[flag-1])
             
-            
+
+
     def menu(self):
         pyg.init()
         window = pyg.display.set_mode((800, 600))
@@ -383,5 +393,5 @@ class BeatSequencer:
             pyg.display.update()
 
 
-newwindow = BeatSequencer()
-newwindow.menu()
+if __name__ == '__main__':
+    newwindow = BeatSequencer()
