@@ -1,9 +1,6 @@
-from multiprocessing.dummy import active_children
-import time
 import pygame as pyg
 import sys
 import mysql.connector
-import pydub as pd
 mydb = mysql.connector.connect(host="localhost", password="S********123")
 
 
@@ -52,6 +49,7 @@ class BeatSequencer:
             [],
             [],
             [],
+            [],
             []
         ]
         for j, list in enumerate(flagList):
@@ -63,11 +61,12 @@ class BeatSequencer:
             [],
             [],
             [],
+            [],
             []
         ]
         for j, list in enumerate(rectList):
             for i in range(no_beats):
-                list.append(pyg.Rect(105 + ((width-105)/no_beats) * (i) , (height/5) * (j), width/no_beats-20, height/5-5))
+                list.append(pyg.Rect(105 + ((width-105)/no_beats) * (i) , (height/len(play1)) * (j), width/no_beats-20, height/len(play1)-5))
         
         # Other useful variables
         run1 = False
@@ -93,7 +92,7 @@ class BeatSequencer:
                     else:
                         pyg.draw.rect(window, (0, 255, 80), j, 0, 5)
             for i in rectList:
-                pyg.draw.rect(window, (0, 255, 255),i[active_beat], 3)
+                pyg.draw.rect(window, (0, 255, 255),i[active_beat], 5)
 
             
             # This what is displayed when the options window in opened
@@ -164,6 +163,8 @@ class BeatSequencer:
                                 if j.collidepoint(pyg.mouse.get_pos()):
                                     if flagList[rectList.index(i)][i.index(j)] == False:
                                         flagList[rectList.index(i)][i.index(j)] = True
+                                        if not play:
+                                            play1[rectList.index(i)].play()
                                     else:
                                         flagList[rectList.index(i)][i.index(j)] = False
                     
@@ -255,7 +256,8 @@ class BeatSequencer:
 
     def menu(self):
         pyg.init()
-        window = pyg.display.set_mode((800, 600))
+        width, height = 800, 600
+        window = pyg.display.set_mode((width, height))
         background = pyg.image.load("SuryaAssets/BeatSequencerMenu.png")
         background = pyg.transform.scale(background, (800, 600))
         icon = pyg.image.load("SuryaAssets/DrumsLogo.png")
@@ -289,43 +291,46 @@ class BeatSequencer:
 
                     elif run1:
                         for i, rect in enumerate(rectList1):
-                            if rect.collidepoint(pyg.mouse.get_pos()):
+                            if rect[1].collidepoint(pyg.mouse.get_pos()):
                                 self.cursor.execute(f"update options set setting  = '' where optionName = '{self.options[i][0]}';")
                                 self.cursor.execute("select * from options")
                                 self.options = self.cursor.fetchall()
                                 flag = i+1
 
                 if run1:
-                    if flag:
-                        if flag == 1:
-                            if event.type == pyg.KEYDOWN:
-                                if event.key == pyg.K_BACKSPACE:
+                    if flag == 1:
+                        if event.type == pyg.KEYDOWN:
+                            if event.key == pyg.K_BACKSPACE:
+                                user_text = user_text[:-1]
+                            elif event.key == pyg.K_RETURN:
+                                self.cursor.execute(f"update options set setting  = '{user_text}' where optionName = '{self.options[flag-1][0]}';")
+                                self.cursor.execute("select * from options")
+                                self.options = self.cursor.fetchall()
+                                user_text = ""
+                                flag = 0
+                            else:
+                                user_text += event.unicode
+                                if not user_text.isdigit():
                                     user_text = user_text[:-1]
-                                elif event.key == pyg.K_RETURN:
-                                    self.cursor.execute(f"update options set setting  = '{user_text}' where optionName = '{self.options[flag-1][0]}';")
-                                    self.cursor.execute("select * from options")
-                                    self.options = self.cursor.fetchall()
-                                    user_text = ""
-                                    flag = 0
-                                else:
-                                    user_text += event.unicode
-                                    if not user_text.isalpha() and int(user_text) > 300:
-                                        user_text = '299'
-                        elif flag == 2:
-                            if event.type == pyg.KEYDOWN:
-                                if event.key == pyg.K_BACKSPACE:
+                                elif int(user_text) > 300:
+                                    user_text = '299'
+                    elif flag == 2:
+                        if event.type == pyg.KEYDOWN:
+                            if event.key == pyg.K_BACKSPACE:
+                                user_text = user_text[:-1]
+                            elif event.key == pyg.K_RETURN:
+                                self.cursor.execute(f"update options set setting  = '{user_text}' where optionName = '{self.options[flag-1][0]}';")
+                                self.cursor.execute("select * from options")
+                                self.options = self.cursor.fetchall()
+                                user_text = ""
+                                flag = 0
+                            else:
+                                user_text += event.unicode
+                                if not user_text.isdigit():
                                     user_text = user_text[:-1]
-                                elif event.key == pyg.K_RETURN:
-                                    self.cursor.execute(f"update options set setting  = '{user_text}' where optionName = '{self.options[flag-1][0]}';")
-                                    self.cursor.execute("select * from options")
-                                    self.options = self.cursor.fetchall()
-                                    user_text = ""
-                                    flag = 0
-                                else:
-                                    user_text += event.unicode
-                                    if int(user_text) > 20:
-                                        user_text = user_text[:-1]
-                        elif flag == 3:
+                                elif int(user_text) > 20:
+                                    user_text = user_text[:-1]
+                    elif flag == 3:
                             if event.type == pyg.KEYDOWN:
                                 if event.key == pyg.K_BACKSPACE:
                                     user_text = user_text[:-1]
@@ -341,7 +346,39 @@ class BeatSequencer:
                                         user_text = user_text[:-1]
                                     if not user_text.isalpha() and user_text.isdigit():
                                         user_text = user_text[:-1]
-                        elif flag == 4:
+                    elif flag == 5:
+                            if event.type == pyg.KEYDOWN:
+                                if event.key == pyg.K_BACKSPACE:
+                                    user_text = user_text[:-1]
+                                elif event.key == pyg.K_RETURN:
+                                    self.cursor.execute(f"update options set setting  = '{user_text}' where optionName = '{self.options[flag-1][0]}';")
+                                    self.cursor.execute("select * from options")
+                                    self.options = self.cursor.fetchall()
+                                    user_text = ""
+                                    flag = 0
+                                else:
+                                    user_text += event.unicode
+                                    if len(user_text) > 1:
+                                        user_text = user_text[:-1]
+                                    if not user_text.isalpha() and user_text.isdigit():
+                                        user_text = user_text[:-1]
+                    elif flag == 6:
+                            if event.type == pyg.KEYDOWN:
+                                if event.key == pyg.K_BACKSPACE:
+                                    user_text = user_text[:-1]
+                                elif event.key == pyg.K_RETURN:
+                                    self.cursor.execute(f"update options set setting  = '{user_text}' where optionName = '{self.options[flag-1][0]}';")
+                                    self.cursor.execute("select * from options")
+                                    self.options = self.cursor.fetchall()
+                                    user_text = ""
+                                    flag = 0
+                                else:
+                                    user_text += event.unicode
+                                    if len(user_text) > 1:
+                                        user_text = user_text[:-1]
+                                    if not user_text.isalpha() and user_text.isdigit():
+                                        user_text = user_text[:-1]
+                    elif flag == 4:
                             if event.type == pyg.KEYDOWN:
                                 if event.key == pyg.K_BACKSPACE:
                                     user_text = user_text[:-1]
@@ -359,6 +396,7 @@ class BeatSequencer:
                                         user_text = user_text[:-1]
 
             if run1 == True:
+                #pyg.draw.line()
                 s = pyg.Surface(window.get_size())
                 s.set_alpha(200)
                 s.fill((0, 0, 0))
@@ -369,21 +407,21 @@ class BeatSequencer:
                 font = pyg.font.SysFont("Arial Black", 20, True, False)
                 rectList1 = []
                 for i in range(len(self.options)):
-                    rectList1.append(pyg.Rect(4*window.get_width()/6, (i+2)*(window.get_height()/6), 100, 50 ))
+                    rectList1.append([pyg.Rect(width/6, (i+5)*0.75*((height-300)/len(self.options)), 100, 50 ), pyg.Rect(4*width/6, (i+5)*0.75*((height-300)/len(self.options)), 100, 50 )])
                 heading = font.render("Controls and Settings", False, (255, 255, 255))
                 window.blit(heading,(window.get_width()/3, window.get_height()/6))
                 heading = font.render("Back----->Escape", False, (255, 255, 255))
                 window.blit(heading,(0, 0))
                 for i, (name, setting) in enumerate(self.options):
                     heading = font.render(name, False, (255, 255, 255))
-                    window.blit(heading,(window.get_width()/6, (i+2)*(window.get_height()/6)))
+                    window.blit(heading, rectList1[i][0])
                     heading = font.render(setting, False, (255, 255, 255))
-                    window.blit(heading,rectList1[i])
+                    window.blit(heading,rectList1[i][1])
 
                 if flag != 0:
                     text = font.render(user_text, True, (255, 255, 255))
-                    pyg.draw.rect(window, (255, 255, 255), rectList1[flag-1], 4)
-                    window.blit(text, rectList1[flag-1])
+                    pyg.draw.rect(window, (255, 255, 255), rectList1[flag-1][1], 4)
+                    window.blit(text, rectList1[flag-1][1])
                         
 
                     
