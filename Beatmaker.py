@@ -253,9 +253,6 @@ class BeatSequencer:
                                         user_text = user_text[:-1]
 
 
-            
-
-
     def menu(self):
         pyg.init()
         window = pyg.display.set_mode((800, 600))
