@@ -1,9 +1,9 @@
-from enum import Flag
-from re import T
+from multiprocessing.dummy import active_children
+import time
 import pygame as pyg
 import sys
 import mysql.connector
-import playsound as ps
+import pydub as pd
 mydb = mysql.connector.connect(host="localhost", password="S********123")
 
 
@@ -28,22 +28,31 @@ class BeatSequencer:
         print(font)
 
     def beatmakerNode(self):
-        no_beats = int(self.options[1][-1])
+        #initializing the modules
         pyg.mixer.init()
-        play1 = pyg.mixer.music.load("SuryaAssets/kick.WAV")
-        play2 = pyg.mixer.music.load("SuryaAssets/snare.WAV")
-        play3 = pyg.mixer.music.load("SuryaAssets/hi hat.WAV")
-        play4 = pyg.mixer.music.load("SuryaAssets/clap.WAV")
-        play5 = pyg.mixer.music.load("SuryaAssets/crash.WAV")
-        play6 = pyg.mixer.music.load("SuryaAssets/silent.wav")
-        icon = pyg.image.load("SuryaAssets/DrumsLogo.png")
-        pyg.display.set_icon(icon)
         pyg.init()
+
+
+        # Creating the Window and cofiguring the settings
         width = 800
         height = 600
-        window = pyg.display.set_mode((800, 600))
+        window = pyg.display.set_mode((width, height))
+        icon = pyg.image.load("SuryaAssets/DrumsLogo.png")
+        pyg.display.set_icon(icon)
+
+
+        # Assigning Variables
+        no_beats = int(self.options[1][-1])
+        play1 = [pyg.mixer.Sound("SuryaAssets/kick.WAV"),
+                 pyg.mixer.Sound("SuryaAssets/snare.WAV"),
+                 pyg.mixer.Sound("SuryaAssets/hi hat.WAV"),
+                 pyg.mixer.Sound("SuryaAssets/clap.WAV"),
+                 pyg.mixer.Sound("SuryaAssets/crash.WAV"),
+                 pyg.mixer.Sound("SuryaAssets/tom.wav")]
         run = True
         clock = pyg.time.Clock()
+        
+        # Button Variables and Adding initial Settings
         flagList = [
             [],
             [],
@@ -66,33 +75,55 @@ class BeatSequencer:
         for j, list in enumerate(rectList):
             for i in range(no_beats):
                 list.append(pyg.Rect(105 + ((width-105)/no_beats) * (i) , (height/5) * (j), width/no_beats-20, height/5-5))
+        
+        # Other useful variables
         run1 = False
         flag = False
         play = False
         user_text = ''
-        bmp = int(self.options[0][-1])
-        beats = 60000//bmp
-        pyg.time.set_timer(1, beats)
+        active_length = 0
+        active_beat = 0
+        beat_changed = False
         counter = 0
+
+
+        # Starting The main loop
         while run:
-            window.fill((0,0,0))
             pyg.draw.rect(window, (80, 80, 80), (0, 0, 100, window.get_height()))
             for i in rectList:
                 for j in i:
                     if flagList[rectList.index(i)][i.index(j)] == False:
-                        pyg.draw.rect(window, (80, 80, 80), j, 0, 10)
+                        pyg.draw.rect(window, (80, 80, 80), j, 0, 5)
                     else:
-                        pyg.draw.rect(window, (80, 180, 80), j, 0, 10)
+                        pyg.draw.rect(window, (80, 180, 80), j, 0, 5)
+            for i in rectList:
+                pyg.draw.rect(window, (0, 255, 255),i[active_beat], 3)
+            pyg.display.update()
+            clock.tick(60)
+            window.fill((0,0,0))
+            
+            if beat_changed:
+                for i in range(len(flagList)):
+                    if flagList[i][active_beat]:
+                        play1[i].play()
+                beat_changed = False
+
+            if run1 == False:
+                bmp = int(self.options[0][-1])
+                beat_length = 3600//bmp 
+            if play:
+                if active_length < beat_length:
+                    active_length += 1
+                else:
+                    active_length = 0
+                    if active_beat < no_beats - 1:
+                        active_beat += 1
+                        beat_changed = True
+                    else:
+                        active_beat = 0
+                        beat_changed = True
+            
             for event in pyg.event.get():
-                if event.type == 1:
-                    if play:
-                        for i in range(no_beats):
-                            if flagList[0][i] == True:
-                                pass
-                            else:
-                                pass
-                                    
-                    
                 if event.type == pyg.QUIT:
                     run = False
                 if event.type == pyg.MOUSEBUTTONDOWN:
@@ -122,6 +153,7 @@ class BeatSequencer:
                             play = False
                         else:
                             play = True
+                            beat_changed = True
                 if run1:
                     if flag:
                         if flag == 1:
@@ -185,6 +217,7 @@ class BeatSequencer:
                                     if not user_text.isalpha() and user_text.isdigit():
                                         user_text = user_text[:-1]
 
+            
             if run1 == True:
                 s = pyg.Surface(window.get_size())
                 s.set_alpha(200)
@@ -193,7 +226,6 @@ class BeatSequencer:
                 key = pyg.key.get_pressed()
                 if key[pyg.K_ESCAPE]:
                     run1= False
-                    pyg.time.set_timer(1, beats)
                 font = pyg.font.SysFont("Arial Black", 20, True, False)
                 rectList1 = []
                 for i in range(len(self.options)):
@@ -212,10 +244,8 @@ class BeatSequencer:
                     text = font.render(user_text, True, (255, 255, 255))
                     pyg.draw.rect(window, (255, 255, 255), rectList1[flag-1], 4)
                     window.blit(text, rectList1[flag-1])
-            if run1 == False:
-                bmp = int(self.options[0][-1])
-                beats = 60000//bmp
-            pyg.display.update()
+            
+            
     def menu(self):
         pyg.init()
         window = pyg.display.set_mode((800, 600))
