@@ -55,21 +55,21 @@ class handDetector:
 
             return self.lmList, bbox
 
-        def fingersUp(self):
-            if len(self.lmList)!=0:
-                fingers = []
-                # Thumb
-                if self.lmList[self.tipIds[0]][1] > self.lmList[self.tipIds[0]-1][1]:
+    def fingersUp(self):
+        if len(self.lmList)!=0:
+            fingers = []
+            # Thumb
+            if self.lmList[self.tipIds[0]][1] > self.lmList[self.tipIds[0]-1][1]:
+                fingers.append(1)
+            else:
+                fingers.append(0)
+            # 4 Fingers
+            for Id in range(1, 5):
+                if self.lmList[self.tipIds[Id]][2] < self.lmList[self.tipIds[Id]-2][2]:
                     fingers.append(1)
                 else:
                     fingers.append(0)
-                # 4 Fingers
-                for Id in range(1, 5):
-                    if self.lmList[self.tipIds[Id]][2] < self.lmList[self.tipIds[Id]-2][2]:
-                        fingers.append(1)
-                    else:
-                        fingers.append(0)
-                        return fingers
+            return fingers
 
     def findDistance(self, p1, p2, img, draw=True):
         if len(self.lmList) != 0:
@@ -102,6 +102,7 @@ def main():
         pTime = cTime
 
         cv2.putText(img, str(int(fps)), (10, 70), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 255), 3)
+        cv2.putText(img, str(detector.fingersUp()), (100, 70), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 255), 3)
 
         cv2.imshow("Image", img)
         cv2.waitKey(1)
