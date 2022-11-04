@@ -1,4 +1,8 @@
+
+from logging import exception
 import pygame as pyg, sys, cv2, random, os, handDetector, time
+
+import speech_recognition as sr
 
 class homeScreen:
     def mainScreen(self):
@@ -6,41 +10,36 @@ class homeScreen:
         window = pyg.display.set_mode((width, height))
         webcam = cv2.VideoCapture(0)
         hand = handDetector.handDetector(maxhands=1)
-        images = []
-        for i in os.listdir("/Users/surya/Desktop/SuryaFolder/SuryaAssets/nature"):
-            images.append(pyg.image.load(f"/Users/surya/Desktop/SuryaFolder/SuryaAssets/nature/{i}"))
+        
         run = True
-        image = images[3]
+        image = pyg.image.load(f"/Users/surya/Desktop/SuryaFolder/SuryaAssets/nature/Image_10.jpg")
         googleWidget = pyg.image.load("SuryaAssets/googleWidget.png")
         googleWidget = pyg.transform.smoothscale(googleWidget, (width-50, height*(width/googleWidget.get_width())))
-        #image = random.choice(images)
         image = pyg.transform.smoothscale(image, (width, height))
-        #image = pyg.transform.chop(image, (0, image.get_height()-100, image.get_width(), 100))
         pTime = 0
+        microphoneRect = pyg.Rect(320, 52, 25, 20)
+        x = y = 0
+        select = False
+        googleAssistant = False
         while run:
-            rect, frame = webcam.read()
-            
+            _, frame = webcam.read()
             frame = cv2.flip(frame, 1)
             window.blit(image, (0, 0))
             hand.findHands(frame)
             lmList = hand.findPosition(frame)
             fingerup = hand.fingersUp()
             window.blit(googleWidget, (20,0))
-            event = pyg.USEREVENT + 1
-            event1 = pyg.event.Event()
-            #print(lmList)
             if lmList:
                 if fingerup == [0, 1, 0, 0, 0]:
                     x = lmList[8][1]/webcam.get(3)
                     y = lmList[8][2]/webcam.get(4)
-
+                    select = False
                     pyg.draw.circle(window, (0, 0, 0), ((width+100)*x, (height+100)*y), 5)
                 elif fingerup == [0, 1, 1, 0, 0]:
                     x = lmList[8][1]/webcam.get(3)
                     y = lmList[8][2]/webcam.get(4)
-
+                    select = True
                     pyg.draw.circle(window, (255, 255, 255), ((width+100)*x, (height+100)*y), 8)
-                    pyg.event.post()
             cTime = time.time()
             fps = 1 / (cTime-pTime)
             pTime = cTime
@@ -53,8 +52,23 @@ class homeScreen:
                     run = False
                     pyg.quit()
                     sys.exit()
-                if event.type == event1:
-                    print(event1)
+
+            if select:
+                if microphoneRect.collidepoint((width+100)*x, (height+100)*y):
+                    googleAssistant = True
+                    select = False
+            
+            if googleAssistant:
+                listener = sr.Recognizer()
+                #print(sr.Microphone.list_microphone_names())
+                try:
+                    with sr.Microphone(0) as source:
+                        
+                        voice = listener.listen(source, None, 5)
+                        command = listener.recognize_google(voice)
+                        print(command)
+                except Exception as m:
+                    print(m)
             pyg.display.update()
             #cv2.imshow("window", frame)
             
