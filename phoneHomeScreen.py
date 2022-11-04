@@ -2,7 +2,7 @@ import pygame as pyg, sys, cv2, random, os, handDetector, time
 
 class homeScreen:
     def mainScreen(self):
-        width, height = 600, 900
+        width, height = 400, 600
         window = pyg.display.set_mode((width, height))
         webcam = cv2.VideoCapture(0)
         hand = handDetector.handDetector(maxhands=1)
@@ -11,6 +11,8 @@ class homeScreen:
             images.append(pyg.image.load(f"/Users/surya/Desktop/SuryaFolder/SuryaAssets/nature/{i}"))
         run = True
         image = images[3]
+        googleWidget = pyg.image.load("SuryaAssets/googleWidget.png")
+        googleWidget = pyg.transform.smoothscale(googleWidget, (width-50, height*(width/googleWidget.get_width())))
         #image = random.choice(images)
         image = pyg.transform.smoothscale(image, (width, height))
         #image = pyg.transform.chop(image, (0, image.get_height()-100, image.get_width(), 100))
@@ -18,17 +20,27 @@ class homeScreen:
         while run:
             rect, frame = webcam.read()
             
+            frame = cv2.flip(frame, 1)
             window.blit(image, (0, 0))
             hand.findHands(frame)
             lmList = hand.findPosition(frame)
             fingerup = hand.fingersUp()
+            window.blit(googleWidget, (20,0))
+            event = pyg.USEREVENT + 1
+            event1 = pyg.event.Event()
             #print(lmList)
             if lmList:
                 if fingerup == [0, 1, 0, 0, 0]:
                     x = lmList[8][1]/webcam.get(3)
                     y = lmList[8][2]/webcam.get(4)
 
-                    pyg.draw.circle(window, (255, 255, 255), (width*x, height*y), 5)
+                    pyg.draw.circle(window, (0, 0, 0), ((width+100)*x, (height+100)*y), 5)
+                elif fingerup == [0, 1, 1, 0, 0]:
+                    x = lmList[8][1]/webcam.get(3)
+                    y = lmList[8][2]/webcam.get(4)
+
+                    pyg.draw.circle(window, (255, 255, 255), ((width+100)*x, (height+100)*y), 8)
+                    pyg.event.post()
             cTime = time.time()
             fps = 1 / (cTime-pTime)
             pTime = cTime
@@ -41,7 +53,10 @@ class homeScreen:
                     run = False
                     pyg.quit()
                     sys.exit()
+                if event.type == event1:
+                    print(event1)
             pyg.display.update()
+            #cv2.imshow("window", frame)
             
 
 phone = homeScreen()
