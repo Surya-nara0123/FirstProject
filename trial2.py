@@ -106,69 +106,11 @@ def bmi():
                     run1 = False
 def data():
     run  = True
-    options1 = False
-    options2 = False
-    open_options = pygame.image.load("HariniAssets/open_options_button.png")
-    open_options = pygame.transform.smoothscale(open_options, (75,75))
-    rect1 = open_options.get_rect()
-    rect2 = open_options.get_rect()
-    rect1.topleft = (360, 165)
-    rect2.topleft = (510, 165)
-    leftOption = "byte"
-    rightoption = ''
-    textList = []
-    textList2 = []
-    inputno = ''
-    processno = ''
-    outputno = 0
     while run:       
         
-        SCREEN1.blit(bgimage,(0,0))
+        SCREEN1.fill((255,255,255))
         word('Data conversion',45,500,100)
-        pygame.draw.rect(SCREEN1,(255,255,255),pygame.Rect(300,400,300,225))
-        pygame.draw.rect(SCREEN1,(255,255,255),pygame.Rect(100,150,350,100))
-        pygame.draw.rect(SCREEN1,(255,255,255),pygame.Rect(500,150,350,100))
-        dictList = [
-            
-            '1',
-            '2',
-            '3',
-            'AC',
-            '4',
-            '5',
-            '6',
-            'back',
-            '7',
-            '8',
-            '9',
-            '0'
-        ]
-                
-        L = ['HariniAssets/1_button_image.png','HariniAssets/2_button_image.png','HariniAssets/3_button_image.png','HariniAssets/AC_button_image.png','HariniAssets/4_button_image.png','HariniAssets/5_button_image.png','HariniAssets/6_button_image.png','HariniAssets/back_button_image.png','HariniAssets/7_button_image.png','HariniAssets/8_button_image.png','HariniAssets/9_button_image.png','HariniAssets/0_button_image.png']
-        i = 0
-        a = 300
-        b = 400
-        l2=[]
-        while i<len(L):
-            a2 = pygame.Rect(a, b , 75, 75)
-            l2 += [a2]
-            i += 1
-            a += 75
-            if i == 4 or i == 8 :
-                a = 300
-                b = b + 75
-        for i in L:
-            button_image = pygame.image.load(i)
-            button_image = pygame.transform.smoothscale(button_image, (75,75))
-            SCREEN1.blit(button_image, (l2[L.index(i)]))
-        open_options = pygame.image.load("HariniAssets/open_options_button.png")
-        open_options = pygame.transform.smoothscale(open_options, (75,75))
-        rect1 = open_options.get_rect()
-        rect2 = open_options.get_rect()
-        rect1.topleft = (360, 165)
-        rect2.topleft = (510, 165)
-        SCREEN1.blit(open_options, rect1)
-        SCREEN1.blit(open_options, rect2)
+        pygame.display.update()
         
         
         
@@ -176,114 +118,12 @@ def data():
                 if event.type == pygame.QUIT:
                     run = False
                     run1 = False
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    for i in l2:
-                        if i.collidepoint(pygame.mouse.get_pos()):
-                            inputno += (dictList[l2.index(i)])
-                            if dictList[l2.index(i)] == 'back':
-                                inputno = inputno[:-5]
-                            if dictList[l2.index(i)] == 'AC':
-                                inputno = ''
-
-                    if rect1.collidepoint(pygame.mouse.get_pos()):
-                        if options1 == options2 == False:
-                            options1 = True
-                        elif options1 == True:
-                            options1 = False
-                    if rect2.collidepoint(pygame.mouse.get_pos()):
-                        if options1 == options2 == False:
-                            options2 = True
-                        elif options2 == True:
-                            options2 = False
-                    if options1:
-                        for i, rect in enumerate(textList):
-                            if rect.collidepoint(pygame.mouse.get_pos()):
-                                leftOption = text[i]
-                                options1 = False
-                    if options2:
-                        for i, rect in enumerate(textList2):
-                            if rect.collidepoint(pygame.mouse.get_pos()):
-                                rightoption = text[i]
-                                options2 = False
-        
-        if options1:
-            pygame.draw.rect(SCREEN1, (255, 255, 255), (50, 300, 200, 300))
-            textList = [
-                pygame.Rect(50, 250 + 250/4, 200, 250/4),
-                pygame.Rect(50, 250 + 2*250/4, 200, 250/4),
-                pygame.Rect(50, 250 + 3*250/4, 200, 250/4),
-                pygame.Rect(50, 250 + 4*250/4, 200, 250/4),
-                pygame.Rect(50, 250 + 5*250/4, 200, 250/4)
-            ]
-        
-            
-            text = [
-                "Byte",
-                "Kilobyte",
-                "Megabyte",
-                "Gigabyte",
-                "Terabyte"
-            ]
-            for i in textList:
-                font = pygame.font.Font('freesansbold.ttf', 30)
-                textcd = font.render(text[textList.index(i)], True, blue)
-                SCREEN1.blit(textcd, i)
-        if options2:
-            pygame.draw.rect(SCREEN1, (255, 255, 255), (800, 300, 200, 300))
-            textList2 = [
-                pygame.Rect(800, 250 + 250/4, 200, 250/4),
-                pygame.Rect(800, 250 + 2*250/4, 200, 250/4),
-                pygame.Rect(800, 250 + 3*250/4, 200, 250/4),
-                pygame.Rect(800, 250 + 4*250/4, 200, 250/4),
-                pygame.Rect(800,250 + 5*250/4,200,250/4)]
-            for i in textList2:
-                font = pygame.font.Font('freesansbold.ttf', 30)
-                textcd = font.render(text[textList2.index(i)], True, blue)
-                SCREEN1.blit(textcd, i)
-            if leftOption == 'Byte':
-                processno = int(inputno) 
-            elif leftOption == 'Kilobyte':
-                processno = int(inputno)*1024
-                
-            elif leftOption == 'Megabyte':
-                processno = int(inputno)*1048576
-            elif leftOption == 'Gigabyte':
-                processno = int(inputno)*1073741824
-            elif leftOption == 'Terabyte':
-                processno = int(inputno)*1099511627776
-                
-            
-            if rightoption == 'Byte':
-                outputno = processno
-                
-            if rightoption == 'Kilobyte':
-                outputno = processno/1024
-            if rightoption == 'Megabyte':
-                outputno = processno/1048576
-            if rightoption == 'Gigabyte':
-                outputno = processno/1073741824
-            if rightoption == 'Terabyte':
-                outputno = processno/1099511627776
-            
-            
-           
-                
-        
-        font = pygame.font.Font('freesansbold.ttf', 30)
-        textcd = font.render(str(outputno), True, blue)
-        SCREEN1.blit(textcd,(600,200))    
-        font = pygame.font.Font('freesansbold.ttf', 30)
-        textcd = font.render(inputno, True, blue)
-        SCREEN1.blit(textcd,(100,150))
-
-
-        pygame.display.update()
-def discount():
+def unit():
     run  = True
     while run:       
         
         SCREEN1.fill((255,255,255))
-        word('Discount',45,500,100)
+        word('Unit conversion',45,500,100)
         pygame.display.update()
         
         
@@ -409,7 +249,6 @@ def age():
                             run1 = False
 
 def base():
-    word('Base convertor',45,500,100)
     run  = True
     options1 = False
     options2 = False
@@ -420,12 +259,7 @@ def base():
     rect1.topleft = (360, 165)
     rect2.topleft = (510, 165)
     leftOption = "Hexadecimal"
-    rightoption = ''
     textList = []
-    textList2 = []
-    inputno = ''
-    processno = 0
-    outputno = 0
     while run:
         SCREEN1.blit(bgimage,(0,0))
         pygame.draw.rect(SCREEN1,(255,255,255),pygame.Rect(100,150,350,100))
@@ -503,28 +337,6 @@ def base():
                 if event.type == pygame.QUIT:
                     run = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    for i in l2:
-                        if i.collidepoint(pygame.mouse.get_pos()):
-                             
-                            if leftOption == 'Hexadecimal':
-                                inputno += (dictList[l2.index(i)])
-
-                            elif leftOption == 'Binary':
-                                if dictList[l2.index(i)] == '0' or dictList[l2.index(i)] == '1':
-                                    inputno += (dictList[l2.index(i)])
-                            elif leftOption == 'Decimal':
-                                if dictList[l2.index(i)] == 'A' or dictList[l2.index(i)] == 'B' or dictList[l2.index(i)] == 'C' or dictList[l2.index(i)] == 'D'or dictList[l2.index(i)] == 'E' or dictList[l2.index(i)] == 'F':
-                                    pass
-                                else:
-                                    inputno += (dictList[l2.index(i)])
-                            elif leftOption == 'Octal':
-                                if dictList[l2.index(i)] == '1' or dictList[l2.index(i)] == '2' or dictList[l2.index(i)] == '3' or dictList[l2.index(i)] == '4'or dictList[l2.index(i)] == '5' or dictList[l2.index(i)] == '6' or dictList[l2.index(i)] == '7':
-                                    inputno += (dictList[l2.index(i)])
-                            if dictList[l2.index(i)] == 'back':
-                                inputno = inputno[:-5]
-                            if dictList[l2.index(i)] == 'AC':
-                                inputno = ''
-                                
                     if rect1.collidepoint(pygame.mouse.get_pos()):
                         if options1 == options2 == False:
                             options1 = True
@@ -540,12 +352,7 @@ def base():
                             if rect.collidepoint(pygame.mouse.get_pos()):
                                 leftOption = text[i]
                                 options1 = False
-                    if options2:
-                        for i, rect in enumerate(textList2):
-                            if rect.collidepoint(pygame.mouse.get_pos()):
-                                rightoption = text[i]
-                                options2 = False
-        
+
         if options1:
             pygame.draw.rect(SCREEN1, (255, 255, 255), (50, 300, 200, 250))
             textList = [
@@ -554,68 +361,18 @@ def base():
                 pygame.Rect(50, 250 + 3*250/4, 200, 250/4),
                 pygame.Rect(50, 250 + 4*250/4, 200, 250/4)
             ]
-        
-            
             text = [
                 "Hexadecimal",
                 "Binary",
-                "Decimal",
-                "Octal"
+                "decimal",
+                "octal"
             ]
             for i in textList:
                 font = pygame.font.Font('freesansbold.ttf', 30)
                 textcd = font.render(text[textList.index(i)], True, blue)
                 SCREEN1.blit(textcd, i)
-           
-
-        font = pygame.font.Font('freesansbold.ttf', 30)
-        textcd = font.render(inputno, True, blue)
-        SCREEN1.blit(textcd,(100,150))
-        if options2:
-            pygame.draw.rect(SCREEN1, (255, 255, 255), (800, 300, 200, 250))
-            textList2 = [
-                pygame.Rect(800, 250 + 250/4, 200, 250/4),
-                pygame.Rect(800, 250 + 2*250/4, 200, 250/4),
-                pygame.Rect(800, 250 + 3*250/4, 200, 250/4),
-                pygame.Rect(800, 250 + 4*250/4, 200, 250/4)]
-            for i in textList2:
-                font = pygame.font.Font('freesansbold.ttf', 30)
-                textcd = font.render(text[textList2.index(i)], True, blue)
-                SCREEN1.blit(textcd, i)
-
-            if leftOption == 'Decimal':
-                processno = int(inputno) 
-            elif leftOption == 'Binary':
-                processno = int(inputno,2)
-                
-            elif leftOption == 'Hexadecimal':
-                processno = int(inputno,16)
-            elif leftOption == 'Octal':
-                processno = int(inputno,8)
-            
-            if rightoption == 'Decimal':
-                outputno = processno
-                
-            if rightoption == 'Binary':
-                outputno = bin(processno)[2:]
-            if rightoption == 'Octal':
-                outputno = oct(processno)[2:]
-            if rightoption == 'Hexadecimal':
-           
-                outputno = hex(processno)[2:]
-        
-        font = pygame.font.Font('freesansbold.ttf', 30)
-        textcd = font.render(str(outputno), True, blue)
-        SCREEN1.blit(textcd,(600,200))    
 
         
-            
-                
-
-
-
-
-
         pygame.display.update()
         
 functionCalls = [
@@ -624,8 +381,8 @@ functionCalls = [
     age,
     time,
     base,
+    unit,
     data,
-    discount,
     bmi,
     equation,
 ]
@@ -640,7 +397,7 @@ def main():
                         finalbutton('HariniAssets/im2.jpeg',650,200),
                         
                         finalbutton('HariniAssets/im 4.jfif',250,350),
-                        finalbutton('HariniAssets/im 5.png',450,350),
+                        finalbutton('HariniAssets/im 5.jpeg',450,350),
                         finalbutton('HariniAssets/im 6.png',650,350),
 
                         finalbutton('HariniAssets/im 7.png',250,500),
@@ -655,7 +412,7 @@ def main():
         word('Time',15,280,450)
         word('Base conversions',15,500,450)
         word('Data conversion',15,700,450)
-        word('Discount',15,300,600)
+        word('Unit conversion',15,300,600)
         word('BMI',15,470,600)
         word('Equation solver',15,700,600)
         
