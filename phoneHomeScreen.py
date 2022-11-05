@@ -21,6 +21,17 @@ class homeScreen:
         x = y = 0
         select = False
         googleAssistant = False
+        def callback(recogniser, audio):
+            c = ''
+            try:
+                c += recogniser.recognize_google(audio)
+            except sr.UnknownValueError:
+                print("Google Speech Recognition could not understand audio")
+        try:
+            listener = sr.Recognizer()
+            listener.listen_in_background(sr.Microphone(), callback, 5)
+        except:
+            pass
         while run:
             _, frame = webcam.read()
             frame = cv2.flip(frame, 1)
@@ -43,10 +54,7 @@ class homeScreen:
             cTime = time.time()
             fps = 1 / (cTime-pTime)
             pTime = cTime
-            buttons = pyg.Surface((image.get_width(), 50))
-            buttons.set_alpha(100)
-            buttons.fill((255, 255, 255))
-            window.blit(buttons, (0, image.get_height()-50))
+            
             for event in pyg.event.get():
                 if event.type == pyg.QUIT:
                     run = False
@@ -58,17 +66,16 @@ class homeScreen:
                     googleAssistant = True
                     select = False
             
+            if c == 'ok google':
+                googleAssistant = True
+
             if googleAssistant:
-                listener = sr.Recognizer()
-                #print(sr.Microphone.list_microphone_names())
-                try:
-                    with sr.Microphone(0) as source:
-                        
-                        voice = listener.listen(source, None, 5)
-                        command = listener.recognize_google(voice)
-                        print(command)
-                except Exception as m:
-                    print(m)
+                pyg.draw.rect(window, (255, 255, 255), (0, height/2, width, height/2), 0, 5)
+                print("olala")
+            buttons = pyg.Surface((image.get_width(), 50))
+            buttons.set_alpha(100)
+            buttons.fill((255, 255, 255))
+            window.blit(buttons, (0, image.get_height()-50))
             pyg.display.update()
             #cv2.imshow("window", frame)
             
