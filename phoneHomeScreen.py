@@ -1,6 +1,6 @@
 
 from logging import exception
-import pygame as pyg, sys, cv2, random, os, handDetector, time
+import pygame as pyg, sys, cv2, random, os, handDetector, time, threading
 
 import speech_recognition as sr
 
@@ -21,17 +21,27 @@ class homeScreen:
         x = y = 0
         select = False
         googleAssistant = False
-        def callback(recogniser, audio):
-            c = ''
-            try:
-                c += recogniser.recognize_google(audio)
-            except sr.UnknownValueError:
-                print("Google Speech Recognition could not understand audio")
-        try:
-            listener = sr.Recognizer()
-            listener.listen_in_background(sr.Microphone(), callback, 5)
-        except:
-            pass
+        c = ''
+        lock = threading.Lock()
+        def function():
+            while True:
+                
+                lock.acquire()
+                googleAss = False
+                print("hello")
+                listener = sr.Recognizer()
+                try:
+                    with sr.Microphone(4) as source:
+                        print("Listening....")
+                        audio = listener.listen(source, None, 2)
+                        command = listener.recognize_google(audio)
+                        if command.lower() == 'ok google' or command.lower() == 'hey google' or command.lower() == 'google':
+                            print("google")
+                            googleAss = True
+                except:
+                    pass
+                lock.release()
+        threading.Thread(target=function).start()
         while run:
             _, frame = webcam.read()
             frame = cv2.flip(frame, 1)
@@ -66,12 +76,23 @@ class homeScreen:
                     googleAssistant = True
                     select = False
             
-            if c == 'ok google':
+            
+            
+            lock.acquire()
+            if googleAss == True:
                 googleAssistant = True
-
+            
+            
+            
+            
+            
             if googleAssistant:
                 pyg.draw.rect(window, (255, 255, 255), (0, height/2, width, height/2), 0, 5)
-                print("olala")
+                google_logo = pyg.image.load('SuryaAssets/Google_Assistant_logo.png')
+                google_logo = pyg.transform.scale(google_logo, (100, 100))
+                google_logo_rect = google_logo.get_rect()
+                google_logo_rect.center = (width/2, height*3/4)
+                window.blit(google_logo, google_logo_rect)
             buttons = pyg.Surface((image.get_width(), 50))
             buttons.set_alpha(100)
             buttons.fill((255, 255, 255))
