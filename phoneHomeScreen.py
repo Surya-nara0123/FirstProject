@@ -1,7 +1,5 @@
-
-from logging import exception
 import pygame as pyg, sys, cv2, random, os, handDetector, time, threading
-
+import pywhatkit, pyjokes
 import speech_recognition as sr
 
 class homeScreen:
@@ -22,27 +20,40 @@ class homeScreen:
         select = False
         googleAssistant = False
         c = ''
-        lock = threading.Lock()
+        a1 = False
         def function():
-            while True:
-                
-                lock.acquire()
-                googleAss = False
-                print("hello")
-                listener = sr.Recognizer()
-                try:
-                    with sr.Microphone(4) as source:
-                        print("Listening....")
-                        audio = listener.listen(source, None, 2)
-                        command = listener.recognize_google(audio)
-                        if command.lower() == 'ok google' or command.lower() == 'hey google' or command.lower() == 'google':
-                            print("google")
-                            googleAss = True
-                except:
-                    pass
-                lock.release()
+            if threading.active_count() != 1:
+                global a
+                a = False
+                while run:
+                    listener = sr.Recognizer()
+                    try:
+                        with sr.Microphone(len(sr.Microphone.list_microphone_names())-1) as source:
+                            listener.adjust_for_ambient_noise(source)
+                            print("Listening....")
+                            audio = listener.listen(source, None, 2)
+                            command = listener.recognize_google(audio).lower()
+                            if command.lower() == 'ok google' or command.lower() == 'hey google' or command.lower() == 'google':
+                                a = True
+                            if a:
+                                if 'tell' in command and 'joke' in command and "don't" not in command and 'do  not' not in command:
+                                    print(pyjokes.get_joke())
+
+                                elif 'play' in command or 'youtube' in command:
+                                    command = command.replace('play', '')
+                                    command = command.replace('youtube', '')
+                                    if command.strip() != '':
+                                        pywhatkit.playonyt(command)
+                                    else:
+                                        pywhatkit.playonyt('never gonna give you up')
+                                
+                                elif 'bye' in command or 'goodbye' in command or 'kill yourself' in command:
+                                    a = False
+                    except Exception as s:
+                        print(s)
         threading.Thread(target=function).start()
         while run:
+            global a
             _, frame = webcam.read()
             frame = cv2.flip(frame, 1)
             window.blit(image, (0, 0))
@@ -73,20 +84,17 @@ class homeScreen:
 
             if select:
                 if microphoneRect.collidepoint((width+100)*x, (height+100)*y):
-                    googleAssistant = True
+                    a1 = True
+                    a = True
                     select = False
             
             
-            
-            lock.acquire()
-            if googleAss == True:
-                googleAssistant = True
+            a1 = a
             
             
             
             
-            
-            if googleAssistant:
+            if a or a1:
                 pyg.draw.rect(window, (255, 255, 255), (0, height/2, width, height/2), 0, 5)
                 google_logo = pyg.image.load('SuryaAssets/Google_Assistant_logo.png')
                 google_logo = pyg.transform.scale(google_logo, (100, 100))
