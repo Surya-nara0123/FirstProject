@@ -1,5 +1,5 @@
 import pygame as pyg, sys, cv2, random, os, handDetector, time, threading
-import pywhatkit, pyjokes
+import pywhatkit, pyjokes, pyttsx3 as pyt
 import speech_recognition as sr
 
 class homeScreen:
@@ -21,11 +21,13 @@ class homeScreen:
         googleAssistant = False
         c = ''
         a1 = False
+        engine = pyt.Engine()
         def function():
             if threading.active_count() != 1:
                 global a
                 a = False
                 while run:
+                    global command
                     listener = sr.Recognizer()
                     try:
                         with sr.Microphone(len(sr.Microphone.list_microphone_names())-1) as source:
@@ -36,24 +38,14 @@ class homeScreen:
                             if command.lower() == 'ok google' or command.lower() == 'hey google' or command.lower() == 'google':
                                 a = True
                             if a:
-                                if 'tell' in command and 'joke' in command and "don't" not in command and 'do  not' not in command:
-                                    print(pyjokes.get_joke())
-
-                                elif 'play' in command or 'youtube' in command:
-                                    command = command.replace('play', '')
-                                    command = command.replace('youtube', '')
-                                    if command.strip() != '':
-                                        pywhatkit.playonyt(command)
-                                    else:
-                                        pywhatkit.playonyt('never gonna give you up')
-                                
-                                elif 'bye' in command or 'goodbye' in command or 'kill yourself' in command:
+                                if 'bye' in command or 'goodbye' in command or 'kill yourself' in command:
                                     a = False
                     except Exception as s:
                         print(s)
-        threading.Thread(target=function).start()
+        threading.Thread(target=function,).start()
         while run:
-            global a
+            engine.startLoop()
+            global a,command
             _, frame = webcam.read()
             frame = cv2.flip(frame, 1)
             window.blit(image, (0, 0))
@@ -101,11 +93,24 @@ class homeScreen:
                 google_logo_rect = google_logo.get_rect()
                 google_logo_rect.center = (width/2, height*3/4)
                 window.blit(google_logo, google_logo_rect)
+                if 'tell' in command and 'joke' in command and "don't" not in command and 'do  not' not in command:
+                    
+                    engine.say(command)
+                    engine.endLoop()
+                    #engine.endLoop()
+                if 'play' in command or 'youtube' in command:
+                    command = command.replace('play', '')
+                    command = command.replace('youtube', '')
+                    if command.strip() != '':
+                        pywhatkit.playonyt(command)
+                    else:
+                        pywhatkit.playonyt('never gonna give you up')
             buttons = pyg.Surface((image.get_width(), 50))
             buttons.set_alpha(100)
             buttons.fill((255, 255, 255))
             window.blit(buttons, (0, image.get_height()-50))
             pyg.display.update()
+            
             #cv2.imshow("window", frame)
             
 
