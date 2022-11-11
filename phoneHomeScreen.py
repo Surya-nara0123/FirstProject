@@ -40,11 +40,22 @@ class homeScreen:
                             if a:
                                 if 'bye' in command or 'goodbye' in command or 'kill yourself' in command:
                                     a = False
+                                if 'tell' in command and 'joke' in command and "don't" not in command and 'do  not' not in command:
+                    
+                                    engine.say(command)
+                                    engine.endLoop()
+                                    #engine.endLoop()
+                                if 'play' in command or 'youtube' in command:
+                                    command = command.replace('play', '')
+                                    command = command.replace('youtube', '')
+                                    if command.strip() != '':
+                                        pywhatkit.playonyt(command)
+                                    else:
+                                        pywhatkit.playonyt('never gonna give you up')
                     except Exception as s:
                         print(s)
         threading.Thread(target=function,).start()
         while run:
-            engine.startLoop()
             global a,command
             _, frame = webcam.read()
             frame = cv2.flip(frame, 1)
@@ -93,18 +104,7 @@ class homeScreen:
                 google_logo_rect = google_logo.get_rect()
                 google_logo_rect.center = (width/2, height*3/4)
                 window.blit(google_logo, google_logo_rect)
-                if 'tell' in command and 'joke' in command and "don't" not in command and 'do  not' not in command:
-                    
-                    engine.say(command)
-                    engine.endLoop()
-                    #engine.endLoop()
-                if 'play' in command or 'youtube' in command:
-                    command = command.replace('play', '')
-                    command = command.replace('youtube', '')
-                    if command.strip() != '':
-                        pywhatkit.playonyt(command)
-                    else:
-                        pywhatkit.playonyt('never gonna give you up')
+                
             buttons = pyg.Surface((image.get_width(), 50))
             buttons.set_alpha(100)
             buttons.fill((255, 255, 255))
