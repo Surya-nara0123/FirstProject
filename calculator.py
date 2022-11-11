@@ -18,6 +18,7 @@ class stack:
         if self.top != None:
             if self.top == 0:
                 self.top = None
+                return self.s.pop()
             else:
                 self.top -= 1
                 return self.s.pop()
@@ -56,17 +57,30 @@ for i in evalString:
                     tempStack.push(i)
 
 print(evaluatingStack.s)
-evaluatingStack.s = evaluatingStack.s[::-1]
-run = True
-while run:
-    value = evaluatingStack.pull()
-    if value not in operators:
-        evaluatingStack.push(value)
-        print("hello")
+st = ''
+for i in evaluatingStack.s:
+    st += i
+print(st)
+outputStack = stack()
+for i in st:
+    if i not in operators:
+        outputStack.push(i)
+        print(*outputStack.s)
     else:
-        value2 = evaluatingStack.pull()
-        value1 = evaluatingStack.pull()
-        evaluatingStack.push(str(value1+value+value2))
-    if evaluatingStack.peak():
-        run = False
-print(evaluatingStack.s)
+        value2 = outputStack.pull()
+        value1 = outputStack.pull()
+        outputStack.push(str(eval(value1+ i+ value2)))
+        print(*outputStack.s)
+#run = True
+#while run:
+#    value = evaluatingStack.pull()
+#    if value not in operators:
+#        evaluatingStack.push(value)
+#        print("hello")
+#    else:
+#        value2 = evaluatingStack.pull()
+#        value1 = evaluatingStack.pull()
+#        evaluatingStack.push(str(value1+value+value2))
+#    if value == None:
+#        run = False
+#print(evaluatingStack.s)
