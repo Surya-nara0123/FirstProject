@@ -228,7 +228,6 @@ def calc():
                     processno2 = processno[:s]+str(k)+processno[f+1:]
                 if i == '!':
                     if processno2[s-2].isnumeric():
-
                         k = math.factorial(int(processno[s-2:s]))
                     processno2 = processno[:s]+str(k)+processno[s+1:]
                 if i=='a' and processno[s+1] == 's':
@@ -1095,6 +1094,17 @@ def discount():
 
 
         pygame.display.update()  
+                
+                
+                
+                
+                    
+
+                    
+                                    
+                        
+            
+        
 def equation():
     run  = True
     option = 0
@@ -1657,15 +1667,15 @@ def main():
         #button
         buttonList = [
                         finalbutton('HariniAssets/2.png',250,200),
-                        #finalbutton('HariniAssets/im 1.png',450,200),
-                        #finalbutton('HariniAssets/im2.png',650,200),
+                        finalbutton('HariniAssets/im 1.png',450,200),
+                        finalbutton('HariniAssets/im2.png',650,200),
                         
-                        #finalbutton('HariniAssets/im 4.png',250,350),
-                        #finalbutton('HariniAssets/im 5.png',450,350),
+                        finalbutton('HariniAssets/im 4.png',250,350),
+                        finalbutton('HariniAssets/im 5.png',450,350),
                         finalbutton('HariniAssets/3.png',650,350),
 
-                        #finalbutton('HariniAssets/im 7.png',250,500),
-                        finalbutton('HariniAssets/BMI.png',450,500),
+                        finalbutton('HariniAssets/im 7.png',250,500),
+                        finalbutton('HariniAssets/im 8.png',450,500),
                         finalbutton('HariniAssets/4.png',650,500)
                       ]
       
