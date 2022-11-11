@@ -28,7 +28,7 @@ class stack:
 
 evaluatingStack = stack()
 tempStack = stack()
-evalString = '(( A * (B + D)/E) - (F * (G + H / K)))'
+evalString = '( 1 * (2 + 3)/4) - (5 * (6 + 7 / 8))'
 operators ='^/*+-'
 print(evalString)
 for i in evalString:
