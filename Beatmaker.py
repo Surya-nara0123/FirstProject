@@ -10,8 +10,20 @@ class BeatSequencer:
     # loading the contents of the database as a constructor
     def __init__(self):
         self.cursor = mydb.cursor()
-        self.cursor.execute("use BeatMakerSettings")
-        self.cursor.execute("select * from options")
+        self.cursor.execute("show databases")
+        databases = self.cursor.fetchall()
+        if ('BeatMakerSettings',) in databases:
+            self.cursor.execute("use BeatMakerSettings")
+        else:
+            self.cursor.execute("create database BeatMakerSettings")
+            self.cursor.execute("create table Options(OptionName varchar(50), Setting varchar(20))")
+            self.cursor.execute("insert into Options('BPM',              120")
+            self.cursor.execute("insert into Options('Beats Per Cycle',  6  ")
+            self.cursor.execute("insert into Options('Pause/Play',       p  ")
+            self.cursor.execute("insert into Options('Open Options',     o  ")
+            self.cursor.execute("insert into Options('clear the screen', c  ")
+            self.cursor.execute("insert into Options('save',             s  ")
+        self.cursor.execute("select * from options")    
         self.options = self.cursor.fetchall()
         self.menu()
     
