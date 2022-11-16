@@ -27,9 +27,12 @@ def clientHandler(c, addr):
                 if msg != '':
                     print(msg)
                     for socket, us, m  in clientList:
-                        socket.send(f"{username}, {datetime.datetime.now()} {msg}".encode("utf-8"))
+                        try:
+                            socket.send(f"('{username}', '{datetime.datetime.now()}', '{msg}')".encode("utf-8"))
+                        except BrokenPipeError:
+                            pass
 while True:
     c, addr = s.accept()
     print ('Got connection from', addr )
-    c.send('Thank you for connecting'.encode())
+    #c.send('Thank you for connecting'.encode())
     threading.Thread(target=clientHandler, args=(c, addr)).start()

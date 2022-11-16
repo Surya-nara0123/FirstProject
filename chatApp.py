@@ -13,9 +13,10 @@ class Application:
         self.window = pyg.display.set_mode((self.width, self.height))
         pyg.display.set_caption("Chatsapp")
         pyg.font.init()
-        self.messages = []
+        
         #variable assigning
         self.run = True
+        self.messages = []
         self.textBoxRect = pyg.Rect(20, self.height-60, self.width-100, 50)
         self.sendBoxRect = pyg.Rect(self.textBoxRect.right+10, self.height-60, 60, 50)
         self.inputText = ''
@@ -40,8 +41,22 @@ class Application:
             
                 print(self.messages)
 
-    def main(self):
+    def placesMessages(self):
+        values = []
+        for text in self.messages:
+            values.append(eval(text))
+        for i, data in enumerate(values):
+            username = data[0]
+            time = data[1]
+            msg = data[2]
+            if username == self.username:
+                pyg.draw.rect(self.window, (255,255,0), (0, self.height/len(self.messages)*i, self.width, 30) , 0, 5)
+            else:
+                pyg.draw.rect(self.window, (0,255, 225), (0, self.height/len(self.messages)*i, self.width, 30) , 0, 5)
 
+
+
+    def main(self):
         while self.run:
             self.window.fill((255, 200, 100))
             pyg.draw.rect(self.window, (255, 255, 255), self.textBoxRect, 0, 100)
@@ -59,7 +74,10 @@ class Application:
                         print("send")
                         try:
                             self.s.send(self.inputText.encode("utf-8"))
+                            if self.flag:
+                                self.useraname = self.inputText
                             self.flag = True
+                            self.username = ''
                         except BrokenPipeError:
                             pass
                 if event.type == pyg.KEYDOWN:
@@ -67,7 +85,9 @@ class Application:
                         self.inputText = self.inputText[:-1]
                     else:
                         self.inputText += event.unicode
+            self.placesMessages()
             self.window.blit(self.font.render(self.inputText, False, (0, 0, 0)), (self.textBoxRect.x+20, self.textBoxRect.y+10))
+            
             pyg.display.update()
 
 if __name__ == "__main__":
