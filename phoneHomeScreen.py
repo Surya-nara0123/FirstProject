@@ -114,5 +114,9 @@ class homeScreen:
             #cv2.imshow("window", frame)
             
 
-phone = homeScreen()
-phone.mainScreen()
+def main():
+    phone = homeScreen()
+    phone.mainScreen()
+
+if __name__ == "__main__":
+    main()
