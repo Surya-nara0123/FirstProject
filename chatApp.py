@@ -24,6 +24,14 @@ class Application:
         self.sendImage = pyg.image.load("SuryaAssets/send-message.png")
         self.sendImage = pyg.transform.scale(self.sendImage, (30, 25))
         self.flag = False
+        self.username = ''
+        self.rectList = []
+        for i in range(50):
+            self.rectList.append(pyg.Rect(0, self.height/15*i, self.width, 30))
+#
+        #self.rectList1 = []
+        #for i in range(50):
+        #    self.rectList.append(pyg.Rect(0, self.height/15*i, self.width, 30))
 
         #server - client connection setting 
         self.s = socket.socket()
@@ -45,20 +53,31 @@ class Application:
         values = []
         for text in self.messages:
             values.append(eval(text))
+        #print(values)
         for i, data in enumerate(values):
+            #print(data)
             username = data[0]
             time = data[1]
             msg = data[2]
+            
+            
+            
             if username == self.username:
-                pyg.draw.rect(self.window, (255,255,0), (0, self.height/len(self.messages)*i, self.width, 30) , 0, 5)
+                text = self.font.render(msg, False, (0,0,0))
+                rect = text.get_rect()
+                rect.center = (self.width - rect.width, self.rectList[i].y+10)
+                pyg.draw.rect(self.window, (255,255,0), rect, 0, 5)
             else:
-                pyg.draw.rect(self.window, (0,255, 225), (0, self.height/len(self.messages)*i, self.width, 30) , 0, 5)
-
+                text = self.font.render(msg, False, (0,0,0))
+                rect = text.get_rect()
+                rect.center = (0, self.rectList[i].y+10)
+                pyg.draw.rect(self.window, (0,0, 225), rect , 0, 5)
 
 
     def main(self):
         while self.run:
             self.window.fill((255, 200, 100))
+            self.placesMessages()
             pyg.draw.rect(self.window, (255, 255, 255), self.textBoxRect, 0, 100)
             pyg.draw.rect(self.window, (100, 255, 100), self.sendBoxRect, 0, 20)
             self.window.blit(self.sendImage, (self.sendBoxRect.x+15, self.sendBoxRect.y+14))
@@ -75,9 +94,9 @@ class Application:
                         try:
                             self.s.send(self.inputText.encode("utf-8"))
                             if self.flag:
-                                self.useraname = self.inputText
+                                self.username = self.inputText
                             self.flag = True
-                            self.username = ''
+                            #self.username = ''
                         except BrokenPipeError:
                             pass
                 if event.type == pyg.KEYDOWN:
@@ -85,11 +104,9 @@ class Application:
                         self.inputText = self.inputText[:-1]
                     else:
                         self.inputText += event.unicode
-            self.placesMessages()
-            self.window.blit(self.font.render(self.inputText, False, (0, 0, 0)), (self.textBoxRect.x+20, self.textBoxRect.y+10))
             
+            self.window.blit(self.font.render(self.inputText, False, (0, 0, 0)), (self.textBoxRect.x+20, self.textBoxRect.y+10))
             pyg.display.update()
-
 if __name__ == "__main__":
     chatapp = Application()
     chatapp.main()
