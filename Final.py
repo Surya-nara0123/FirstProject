@@ -12,6 +12,7 @@ FPS = 200
 clock=pygame.time.Clock()
 SCREEN1 = pygame.display.set_mode((WIDTH,HEIGHT))
 pygame.display.set_caption("CALCULATOR")
+pygame.display.set_icon(pygame.image.load("HariniAssets/download.png"))
 bg_image = pygame.image.load("HariniAssets/im 10.jpeg").convert_alpha()
 bgimage = pygame.transform.scale(bg_image, (1000,700))
 SCREEN1.blit(bgimage,(0,0))
