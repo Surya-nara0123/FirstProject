@@ -25,6 +25,7 @@ class Application:
         self.sendImage = pyg.transform.scale(self.sendImage, (30, 25))
         self.flag = False
         self.username = ''
+        self.enterUserName = True
         self.rectList = []
         for i in range(50):
             self.rectList.append(pyg.Rect(0, self.height/15*i, self.width, 30))
@@ -41,20 +42,16 @@ class Application:
 
     def recieve(self):
         while True:
-            if self.flag:
+            if not self.enterUserName:
                 try:
-                    self.messages.append(self.s.recv(2048).decode("utf-8"))
+                    self.messages.append(eval(self.s.recv(2048).decode("utf-8")))
                 except Exception as m:
                     pass
             
                 print(self.messages)
 
     def placesMessages(self):
-        values = []
-        for text in self.messages:
-            values.append(eval(text))
-        #print(values)
-        for i, data in enumerate(values):
+        for i, data in enumerate(self.messages):
             #print(data)
             username = data[0]
             time = data[1]
@@ -63,15 +60,17 @@ class Application:
             
             
             if username == self.username:
-                text = self.font.render(msg, False, (0,0,0))
+                text = self.font.render(msg, False, (255,255,255))
                 rect = text.get_rect()
-                rect.center = (self.width - rect.width, self.rectList[i].y+10)
-                pyg.draw.rect(self.window, (255,255,0), rect, 0, 5)
+                rect.topleft = (self.width - rect.width, self.rectList[i].y+10)
+                pyg.draw.rect(self.window, (18,146,120), rect, 0, 5)
+                self.window.blit(text, rect)
             else:
-                text = self.font.render(msg, False, (0,0,0))
+                text = self.font.render(msg, False, (255,255,255))
                 rect = text.get_rect()
-                rect.center = (0, self.rectList[i].y+10)
-                pyg.draw.rect(self.window, (0,0, 225), rect , 0, 5)
+                rect.topleft = (0, self.rectList[i].y+10)
+                pyg.draw.rect(self.window, (50,50, 50), rect , 0, 5)
+                self.window.blit(text, rect)
 
 
     def main(self):
@@ -93,15 +92,31 @@ class Application:
                         print("send")
                         try:
                             self.s.send(self.inputText.encode("utf-8"))
-                            if self.flag:
+                            if self.enterUserName:
                                 self.username = self.inputText
-                            self.flag = True
-                            #self.username = ''
+                                self.enterUserName = False
+                            #if self.flag:
+                            #    self.username = self.inputText
+                            #self.flag = True
+                            self.inputText = ''
                         except BrokenPipeError:
                             pass
                 if event.type == pyg.KEYDOWN:
                     if event.key == pyg.K_BACKSPACE:
                         self.inputText = self.inputText[:-1]
+                    elif event.key == pyg.K_RETURN:
+                        print("send")
+                        try:
+                            self.s.send(self.inputText.encode("utf-8"))
+                            if self.enterUserName:
+                                self.username = self.inputText
+                                self.enterUserName = False
+                            #if self.flag:
+                            #    self.username = self.inputText
+                            #self.flag = True
+                            self.inputText = ''
+                        except BrokenPipeError:
+                            pass
                     else:
                         self.inputText += event.unicode
             
