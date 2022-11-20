@@ -19,13 +19,11 @@ def clientHandler(c, addr):
             #c.close()
             print("hello, ", username)
             while True:
-                #print('hello')
                 try:
                     msg = c.recv(2048).decode("utf-8")
                 except Exception as m:
                     msg = ''
                 if msg != '':
-                    print(msg)
                     for socket, us, m  in clientList:
                         try:
                             socket.send(f"('{username}', '{datetime.datetime.now()}', '{msg}')".encode("utf-8"))

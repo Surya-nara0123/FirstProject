@@ -1,6 +1,6 @@
 import pygame as pyg, sys, cv2, random, os, handDetector, time, threading
 import pywhatkit, pyjokes, pyttsx3 as pyt
-import speech_recognition as sr
+import speech_recognition as sr, chatApp
 
 class homeScreen:
     def mainScreen(self):
@@ -14,6 +14,9 @@ class homeScreen:
         googleWidget = pyg.image.load("SuryaAssets/googleWidget.png")
         googleWidget = pyg.transform.smoothscale(googleWidget, (width-50, height*(width/googleWidget.get_width())))
         image = pyg.transform.smoothscale(image, (width, height))
+        chatsappIcon = pyg.image.load("SuryaAssets/download-16.jpg")
+        chatsappIcon = pyg.transform.smoothscale(chatsappIcon, (40, 40))
+
         pTime = 0
         microphoneRect = pyg.Rect(320, 52, 25, 20)
         x = y = 0
@@ -21,6 +24,7 @@ class homeScreen:
         googleAssistant = False
         c = ''
         a1 = False
+        run1 = False
         engine = pyt.Engine()
         def function():
             if threading.active_count() != 1:
@@ -30,6 +34,7 @@ class homeScreen:
                     global command
                     listener = sr.Recognizer()
                     try:
+                        global run1
                         with sr.Microphone(len(sr.Microphone.list_microphone_names())-1) as source:
                             listener.adjust_for_ambient_noise(source)
                             print("Listening....")
@@ -52,9 +57,17 @@ class homeScreen:
                                         pywhatkit.playonyt(command)
                                     else:
                                         pywhatkit.playonyt('never gonna give you up')
+                                if 'open' in command or 'run' in command:
+                                    command = command.replace('open', '')
+                                    command = command.replace('run', '')
+                                    if 'whatsapp' in command or "chatsappp" in command:
+                                        run1 = True
+                                        chatApp.run()
+                                        #threading.Condition.wait()
+
                     except Exception as s:
                         print(s)
-        threading.Thread(target=function,).start()
+        b = threading.Thread(target=function,).start()
         while run:
             global a,command
             _, frame = webcam.read()
@@ -93,7 +106,9 @@ class homeScreen:
             
             
             a1 = a
-            
+            if run1:
+                print("hello")
+                chatApp.run()
             
             
             
@@ -109,6 +124,7 @@ class homeScreen:
             buttons.set_alpha(100)
             buttons.fill((255, 255, 255))
             window.blit(buttons, (0, image.get_height()-50))
+            window.blit(chatsappIcon, (100, height//2))
             pyg.display.update()
             
             #cv2.imshow("window", frame)

@@ -12,6 +12,7 @@ class Application:
         self.width, self.height = 400, 600
         self.window = pyg.display.set_mode((self.width, self.height))
         pyg.display.set_caption("Chatsapp")
+        pyg.display.set_icon(pyg.image.load("SuryaAssets/download-16.jpg"))
         pyg.font.init()
         
         #variable assigning
@@ -42,6 +43,9 @@ class Application:
 
     def recieve(self):
         while True:
+            if threading.active_count() == 0:
+                self.s.close()
+                sys.exit()
             if not self.enterUserName:
                 try:
                     self.messages.append(eval(self.s.recv(2048).decode("utf-8")))
@@ -61,10 +65,15 @@ class Application:
             
             if username == self.username:
                 text = self.font.render(msg, False, (255,255,255))
+                font2 = pyg.font.SysFont("arial black", 10, True)
+                time = font2.render(time, True, (255, 255,255))
                 rect = text.get_rect()
+                rect2 = time.get_rect()
+                rect2.topleft = (self.width - rect2.width, self.rectList[i].y+35)
                 rect.topleft = (self.width - rect.width, self.rectList[i].y+10)
                 pyg.draw.rect(self.window, (18,146,120), rect, 0, 5)
                 self.window.blit(text, rect)
+                self.window.blit(time, rect2)
             else:
                 text = self.font.render(msg, False, (255,255,255))
                 rect = text.get_rect()
@@ -122,6 +131,9 @@ class Application:
             
             self.window.blit(self.font.render(self.inputText, False, (0, 0, 0)), (self.textBoxRect.x+20, self.textBoxRect.y+10))
             pyg.display.update()
-if __name__ == "__main__":
+def run():
     chatapp = Application()
     chatapp.main()
+
+if __name__ == "__main__":
+    run()
