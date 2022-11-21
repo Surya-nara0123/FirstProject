@@ -77,9 +77,14 @@ class Application:
             else:
                 text = self.font.render(msg, False, (255,255,255))
                 rect = text.get_rect()
+                font2 = pyg.font.SysFont("arial black", 10, True)
+                time = font2.render(time, True, (255, 255,255))
                 rect.topleft = (0, self.rectList[i].y+10)
+                rect2 = time.get_rect()
+                rect2.topleft = (0, self.rectList[i].y+35)
                 pyg.draw.rect(self.window, (50,50, 50), rect , 0, 5)
                 self.window.blit(text, rect)
+                self.window.blit(time, rect2)
 
 
     def main(self):
