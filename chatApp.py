@@ -16,6 +16,7 @@ class Application:
         pyg.font.init()
         
         #variable assigning
+        self.EndThread = False
         self.run = True
         self.messages = []
         self.textBoxRect = pyg.Rect(20, self.height-60, self.width-100, 50)
@@ -43,7 +44,7 @@ class Application:
 
     def recieve(self):
         while True:
-            if threading.active_count() == 0:
+            if self.EndThread:
                 self.s.close()
                 sys.exit()
             if not self.enterUserName:
@@ -96,11 +97,10 @@ class Application:
             self.window.blit(self.sendImage, (self.sendBoxRect.x+15, self.sendBoxRect.y+14))
             for event in pyg.event.get():
                 if event.type == pyg.QUIT:
-                    run = False
+                    self.run = False
+                    self.EndThread = True
                     #self.s.send("oooo".encode("utf-8"))
-                    pyg.quit()
-                    sys.exit()
-
+                    
                 if event.type == pyg.MOUSEBUTTONDOWN:
                     if self.sendBoxRect.collidepoint(pyg.mouse.get_pos()):
                         print("send")

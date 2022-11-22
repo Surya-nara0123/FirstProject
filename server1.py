@@ -1,15 +1,4 @@
 import socket, threading, sys, datetime
-try:
-    s = socket.socket()		
-    print ("Socket successfully created")
-    port = 12345
-    s.bind(('', port))		
-    print ("socket binded to %s" %(port))
-    s.listen(5)	
-    print ("socket is listening")
-    function()
-except:
-    pass
 clientList = []
 
 def clientHandler(c, addr):
@@ -21,7 +10,7 @@ def clientHandler(c, addr):
         if username != '':
             clientList.append((c, username, addr))
             #c.close()
-            print("hello, ", username)
+            #print("hello, ", username)
             while True:
                 try:
                     msg = c.recv(2048).decode("utf-8")
@@ -37,19 +26,19 @@ def function():
 
     while True:
         c, addr = s.accept()
-        print ('Got connection from', addr )
+        #print ('Got connection from', addr )
         #c.send('Thank you for connecting'.encode())
         threading.Thread(target=clientHandler, args=(c, addr)).start()
     
 if __name__ == "__main__":
     try:
         s = socket.socket()		
-        print ("Socket successfully created")
+        #print ("Socket successfully created")
         port = 12345
         s.bind(('', port))		
-        print ("socket binded to %s" %(port))
+        #print ("socket binded to %s" %(port))
         s.listen(5)	
-        print ("socket is listening")
+        #print ("socket is listening")
         function()
     except:
         pass

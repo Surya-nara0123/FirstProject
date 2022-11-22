@@ -1,6 +1,6 @@
 import pygame as pyg, sys, cv2, random, os, handDetector, time, threading
 import pywhatkit, pyjokes, pyttsx3 as pyt
-import speech_recognition as sr, chatApp, server1
+import speech_recognition as sr, chatApp, subprocess
 
 class homeScreen:
     def __init__(self):
@@ -29,14 +29,14 @@ class homeScreen:
         self.run1 = False
         self.command = ''
         self.newserver = False
-        self.d = threading.Thread(target=self.mainScreen,).start()
-        self.b = threading.Thread(target=self.function,).start()
-        self.g =  threading.Thread(target=(server1.function(),)).start()
+        self.GoogleListener = True
+        
+        #self.g =  threading.Thread(target=(server1.function(),)).start()
         
 
     def function(self):
-        if threading.active_count() != 1:
-            while self.run:
+        while self.run:
+            if self.GoogleListener:
                 try:
                     with sr.Microphone(len(sr.Microphone.list_microphone_names())-1) as source:
                         self.listener.adjust_for_ambient_noise(source)
@@ -46,8 +46,13 @@ class homeScreen:
                         if self.command.lower() == 'ok google' or self.command.lower() == 'hey google' or self.command.lower() == 'google':
                             self.a = True
                         if self.a:
+                            if 'switch off the phone' in self.command or "switch off" in self.command:
+                                self.GoogleListener = False
+                                self.run = False
+                                pyg.quit()
+                                sys.exit()
                             if 'bye' in self.command or 'goodbye' in self.command or 'kill yourself' in self.command:
-                                a = False
+                                self.a = False
                             if 'tell' in self.command and 'joke' in self.command and "don't" not in self.command and 'do  not' not in self.command:
                 
                                 self.engine.say(self.command)
@@ -74,9 +79,10 @@ class homeScreen:
 
                 except Exception as s:
                     print(s)
-    def mainScreen(self):        
+    def mainScreen(self):
+        self.b = threading.Thread(target=self.function,).start()
+        #self.c = threading.Thread(target=subprocess.call(["python", "server1.py"]),).start()
         
-        #self.g.join()
         while self.run:
             #global a,command
             _, frame = self.webcam.read()
@@ -109,15 +115,18 @@ class homeScreen:
 
             if self.select:
                 if self.microphoneRect.collidepoint((self.width+100)*x, (self.height+100)*y):
-                    a1 = True
-                    a = True
+                    self.a1 = True
+                    self.a = True
                     self.select = False
             
             self.window.blit(self.chatsappIcon, (100, self.height//2))
             self.a1 = self.a
             if self.run1:
                 print("hello")
+                self.GoogleListener = False
                 chatApp.run()
+                self.run1 = False
+                self.GoogleListener = True
                     
             
             
@@ -140,7 +149,7 @@ class homeScreen:
 
 def main():
     phone = homeScreen()
-    #phone.mainScreen()
+    phone.mainScreen()
 
 if __name__ == "__main__":
     main()
