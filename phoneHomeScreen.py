@@ -1,6 +1,6 @@
-import pygame as pyg, sys, cv2, random, os, handDetector, time, threading
+import pygame as pyg, sys, cv2, handDetector, time, threading
 import pywhatkit, pyjokes, pyttsx3 as pyt
-import speech_recognition as sr, chatApp, subprocess
+import speech_recognition as sr, chatApp, Final, Beatmaker, datetime, subprocess
 
 class homeScreen:
     def __init__(self):
@@ -9,12 +9,16 @@ class homeScreen:
         self.webcam = cv2.VideoCapture(0)
         self.hand = handDetector.handDetector(maxhands=1)
         self.run = True
-        self.image = pyg.image.load(f"/Users/surya/Desktop/SuryaFolder/SuryaAssets/nature/Image_10.jpg")
+        self.background = pyg.image.load(f"/Users/surya/Desktop/SuryaFolder/SuryaAssets/nature/Image_10.jpg")
         self.googleWidget = pyg.image.load("SuryaAssets/googleWidget.png")
         self.googleWidget = pyg.transform.smoothscale(self.googleWidget, (self.width-50, self.height*(self.width/self.googleWidget.get_width())))
-        self.image = pyg.transform.smoothscale(self.image, (self.width, self.height))
+        self.background = pyg.transform.smoothscale(self.background, (self.width, self.height))
         self.chatsappIcon = pyg.image.load("SuryaAssets/download-16.jpg")
         self.chatsappIcon = pyg.transform.smoothscale(self.chatsappIcon, (40, 40))
+        self.calculatorIcon = pyg.image.load("HariniAssets/download.png")
+        self.calculatorIcon = pyg.transform.scale(self.calculatorIcon, (40, 40))
+        self.beatmakerIcon = pyg.image.load("SuryaAssets/DrumsLogo.png")
+        self.beatmakerIcon = pyg.transform.scale(self.beatmakerIcon, (40, 40))
         self.pTime = 0
         self.microphoneRect = pyg.Rect(320, 52, 25, 20)
         self.x = y = 0
@@ -54,9 +58,7 @@ class homeScreen:
                             if 'bye' in self.command or 'goodbye' in self.command or 'kill yourself' in self.command:
                                 self.a = False
                             if 'tell' in self.command and 'joke' in self.command and "don't" not in self.command and 'do  not' not in self.command:
-                
-                                self.engine.say(self.command)
-                                self.engine.endLoop()
+                                subprocess.call(['python3.10', 'talk.py', pyjokes.get_joke(language='en', category='all')])
                                 #engine.endLoop()
                             if 'play' in self.command or 'youtube' in self.command:
                                 self.command = self.command.replace('play', '')
@@ -65,17 +67,19 @@ class homeScreen:
                                     pywhatkit.playonyt(self.command)
                                 else:
                                     pywhatkit.playonyt('never gonna give you up')
+                            if "time" in self.command:
+                                datetime.datetime.now().strftime('%I:%M %p')
+                                #print("who is")
+                                #pywhatkit.sendwhatmsg_instantly('+91 86103 35141', "Hey All! This is message sent not by Surya but is sent by python")
                             if 'open' in self.command or 'run' in self.command:
                                 self.command = self.command.replace('open', '')
                                 self.command = self.command.replace('run', '')
                                 if 'whatsapp' in self.command or "chatsappp" in self.command:
-                                    if 'in a new group' in self.command:
-                                        self.newserver = True
-                                    else:
-                                        self.newserver = False
-                                    self.run1 = True
-                                    #threading.Thread(target = (chatApp.run(), )).start
-                                    #threading.Condition.wait()
+                                    self.run1 = "chatApp"
+                                if 'calculator' in self.command:
+                                    self.run1 = "calculator"
+                                if 'beat maker' in self.command:
+                                    self.run1 = "beatmaker"
 
                 except Exception as s:
                     print(s)
@@ -87,7 +91,7 @@ class homeScreen:
             #global a,command
             _, frame = self.webcam.read()
             frame = cv2.flip(frame, 1)
-            self.window.blit(self.image, (0, 0))
+            self.window.blit(self.background, (0, 0))
             self.hand.findHands(frame)
             lmList = self.hand.findPosition(frame)
             fingerup = self.hand.fingersUp()
@@ -119,15 +123,32 @@ class homeScreen:
                     self.a = True
                     self.select = False
             
-            self.window.blit(self.chatsappIcon, (100, self.height//2))
+            self.window.blit(self.chatsappIcon, (50, self.height//2))
+            self.window.blit(self.calculatorIcon, (100, self.height//2))
+            self.window.blit(self.beatmakerIcon, (150, self.height//2))
             self.a1 = self.a
-            if self.run1:
+            if self.run1 == "chatApp":
                 print("hello")
                 self.GoogleListener = False
                 chatApp.run()
                 self.run1 = False
                 self.GoogleListener = True
-                    
+
+            if self.run1 == "calculator":
+                print("hello")
+                self.GoogleListener = False
+                Final.main()
+                self.window = pyg.display.set_mode((self.width, self.height))
+                self.run1 = False
+                self.GoogleListener = True
+
+            if self.run1 == "beatmaker":
+                print("hello")
+                self.GoogleListener = False
+                Beatmaker.BeatSequencer()
+                self.window = pyg.display.set_mode((self.width, self.height))
+                self.run1 = False
+                self.GoogleListener = True
             
             
             if self.a or self.a1:
@@ -138,10 +159,10 @@ class homeScreen:
                 google_logo_rect.center = (self.width/2, self.height*3/4)
                 self.window.blit(google_logo, google_logo_rect)
                 
-            buttons = pyg.Surface((self.image.get_width(), 50))
+            buttons = pyg.Surface((self.background.get_width(), 50))
             buttons.set_alpha(100)
             buttons.fill((255, 255, 255))
-            self.window.blit(buttons, (0, self.image.get_height()-50))
+            self.window.blit(buttons, (0, self.background.get_height()-50))
             pyg.display.update()
             
             #cv2.imshow("window", frame)

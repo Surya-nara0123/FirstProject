@@ -119,21 +119,21 @@ class BeatSequencer:
                 font = pyg.font.SysFont("Arial Black", 20, True, False)
                 rectList1 = []
                 for i in range(len(self.options)):
-                    rectList1.append(pyg.Rect(4*window.get_width()/6, (i+2)*(window.get_height()/6), 100, 50 ))
+                    rectList1.append([pyg.Rect(width/6, (i+5)*0.75*((height-300)/len(self.options)), 100, 50 ), pyg.Rect(4*width/6, (i+5)*0.75*((height-300)/len(self.options)), 100, 50 )])
                 heading = font.render("Controls and Settings", False, (255, 255, 255))
                 window.blit(heading,(window.get_width()/3, window.get_height()/6))
                 heading = font.render("Back----->Escape", False, (255, 255, 255))
                 window.blit(heading,(0, 0))
                 for i, (name, setting) in enumerate(self.options):
                     heading = font.render(name, False, (255, 255, 255))
-                    window.blit(heading,(window.get_width()/6, (i+2)*(window.get_height()/6)))
+                    window.blit(heading, rectList1[i][0])
                     heading = font.render(setting, False, (255, 255, 255))
-                    window.blit(heading,rectList1[i])
+                    window.blit(heading,rectList1[i][1])
 
                 if flag != 0:
                     text = font.render(user_text, True, (255, 255, 255))
-                    pyg.draw.rect(window, (255, 255, 255), rectList1[flag-1], 4)
-                    window.blit(text, rectList1[flag-1])
+                    pyg.draw.rect(window, (255, 255, 255), rectList1[flag-1][1], 4)
+                    window.blit(text, rectList1[flag-1][1])
             pyg.display.update()
             clock.tick(60)
             
@@ -183,7 +183,7 @@ class BeatSequencer:
                     # If click our mouse when we are in the options window                    
                     elif run1:
                         for i, rect in enumerate(rectList1):
-                            if rect.collidepoint(pyg.mouse.get_pos()):
+                            if rect[1].collidepoint(pyg.mouse.get_pos()):
                                 self.cursor.execute(f"update options set setting  = '' where optionName = '{self.options[i][0]}';")
                                 self.cursor.execute("select * from options")
                                 self.options = self.cursor.fetchall()
@@ -191,16 +191,34 @@ class BeatSequencer:
 
                 # If we press any thing ok our key board when the options window is not open
                 elif event.type == pyg.KEYDOWN:
-                    text = eval('pyg.K_'+self.options[-1][-1])
+                    text = eval('pyg.K_'+self.options[3][-1])
                     if event.key == text:
                         run1 = True
-                    text = eval('pyg.K_'+self.options[-2][-1])
+                    text = eval('pyg.K_'+self.options[2][-1])
                     if event.key == text:
                         if play:
                             play = False
                         else:
                             play = True
                             beat_changed = True
+                    text = eval('pyg.K_'+self.options[4][-1])
+                    if event.key == text:
+                        flagList = [
+                            [],
+                            [],
+                            [],
+                            [],
+                            [],
+                            [],
+                            []
+                        ]
+                        for j, list in enumerate(flagList):
+                            for i in range(no_beats):
+                                list.append(False)
+                    text = eval('pyg.K_'+self.options[5][-1])
+                    if event.key == text:
+                        pass
+                    
                 # If we press any thing ok our key board when the options window is not open
                 if run1:
                     if flag:
@@ -289,9 +307,6 @@ class BeatSequencer:
             for event in pyg.event.get():
                 if event.type == pyg.QUIT:
                     run = False
-                    pyg.quit()
-                    pyg.display.quit()
-                    sys.exit()
                 elif event.type == pyg.MOUSEBUTTONDOWN:
                     if run1 == False:
                         if rectList[0].collidepoint(pyg.mouse.get_pos()):

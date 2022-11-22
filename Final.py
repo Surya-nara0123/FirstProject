@@ -5,23 +5,7 @@ import datetime
 from datetime import date
 import pyttsx3
 # creating the window
-pygame.init()
-WIDTH = 1000
-HEIGHT = 700
-FPS = 200
-clock=pygame.time.Clock()
-SCREEN1 = pygame.display.set_mode((WIDTH,HEIGHT))
-pygame.display.set_caption("CALCULATOR")
-pygame.display.set_icon(pygame.image.load("HariniAssets/download.png"))
-bg_image = pygame.image.load("HariniAssets/im 10.jpeg").convert_alpha()
-bgimage = pygame.transform.scale(bg_image, (1000,700))
-SCREEN1.blit(bgimage,(0,0))
-blue = (0,191,255)
-#variables
-action = False
-h = False
-DEFAULT_IMAGE_SIZE = (80, 80)
-dictList = ['1','2','3','AC','4','5','6','back','7','8','9','0']
+
 #functions
 class button():
     def __init__(self,x,y,image):
@@ -978,7 +962,25 @@ def base():
         pygame.display.update()
 functionCalls = [gst,calc,age,Time,base,data,discount,bmi,equation]
 def main():
+    global SCREEN1, blue, bgimage
     run1  = True
+    pygame.init()
+    WIDTH = 1000
+    HEIGHT = 700
+    FPS = 200
+    clock=pygame.time.Clock()
+    SCREEN1 = pygame.display.set_mode((WIDTH,HEIGHT))
+    pygame.display.set_caption("CALCULATOR")
+    pygame.display.set_icon(pygame.image.load("HariniAssets/download.png"))
+    bg_image = pygame.image.load("HariniAssets/im 10.jpeg").convert_alpha()
+    bgimage = pygame.transform.scale(bg_image, (1000,700))
+    SCREEN1.blit(bgimage,(0,0))
+    blue = (0,191,255)
+    #variables
+    action = False
+    h = False
+    DEFAULT_IMAGE_SIZE = (80, 80)
+    dictList = ['1','2','3','AC','4','5','6','back','7','8','9','0']
     while run1:
         SCREEN1.blit(bgimage,(0,0))
         #button
@@ -997,5 +999,6 @@ def main():
                 for rect in range(len(buttonList)):
                     if buttonList[rect].collidepoint(pygame.mouse.get_pos()):
                         functionCalls[rect]()
-    pygame.quit()
-main()
+if __name__ == "__main__":
+    
+    main()
