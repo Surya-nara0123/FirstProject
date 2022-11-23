@@ -34,6 +34,9 @@ class homeScreen:
         self.command = ''
         self.newserver = False
         self.GoogleListener = True
+        self.AppRects = [pyg.Rect(50, self.height//2, 40, 40),
+                         pyg.Rect(100, self.height//2, 40, 40),
+                         pyg.Rect(150, self.height//2, 40, 40)]
         
         #self.g =  threading.Thread(target=(server1.function(),)).start()
         
@@ -58,7 +61,7 @@ class homeScreen:
                             if 'bye' in self.command or 'goodbye' in self.command or 'kill yourself' in self.command:
                                 self.a = False
                             if 'tell' in self.command and 'joke' in self.command and "don't" not in self.command and 'do  not' not in self.command:
-                                subprocess.call(['python3.10', 'talk.py', pyjokes.get_joke(language='en', category='all')])
+                                subprocess.call(['python3.10', 'talk.py', pyjokes.get_joke(language='en', category='neutral')])
                                 #engine.endLoop()
                             if 'play' in self.command or 'youtube' in self.command:
                                 self.command = self.command.replace('play', '')
@@ -123,9 +126,9 @@ class homeScreen:
                     self.a = True
                     self.select = False
             
-            self.window.blit(self.chatsappIcon, (50, self.height//2))
-            self.window.blit(self.calculatorIcon, (100, self.height//2))
-            self.window.blit(self.beatmakerIcon, (150, self.height//2))
+            self.window.blit(self.chatsappIcon, self.AppRects[0])
+            self.window.blit(self.calculatorIcon, self.AppRects[1])
+            self.window.blit(self.beatmakerIcon, self.AppRects[2])
             self.a1 = self.a
             if self.run1 == "chatApp":
                 print("hello")
