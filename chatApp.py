@@ -12,7 +12,7 @@ class Application:
         #inittialising stuff
         self.width, self.height = 400, 600
         self.window = pyg.display.set_mode((self.width, self.height))
-        pyg.display.set_caption("Chatsapp")
+        pyg.display.set_caption("Surya Chat")
         pyg.display.set_icon(pyg.image.load("SuryaAssets/download-16.jpg"))
         pyg.font.init()
         

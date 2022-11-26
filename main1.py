@@ -58,7 +58,6 @@ def mainMenu():
         for event in pyg.event.get():
             if event.type == pyg.QUIT:
                 run = False
-                pyg.quit()
 
             elif event.type == pyg.MOUSEBUTTONDOWN:
                 for j, i in enumerate(rect):
@@ -87,5 +86,5 @@ def mainMenu():
         clock.tick(30)
         pyg.display.update()
 
-
-mainMenu()
+if  __name__ == "__name__":
+    mainMenu()

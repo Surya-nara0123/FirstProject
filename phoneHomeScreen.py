@@ -1,6 +1,6 @@
 import pygame as pyg, sys, cv2, handDetector, time, threading
 import pywhatkit, pyjokes, pyttsx3 as pyt
-import speech_recognition as sr, chatApp, Final, Beatmaker, datetime, subprocess
+import speech_recognition as sr, chatApp, Final, Beatmaker, datetime, subprocess, main1
 
 class homeScreen:
     def __init__(self):
@@ -19,6 +19,8 @@ class homeScreen:
         self.calculatorIcon = pyg.transform.scale(self.calculatorIcon, (40, 40))
         self.beatmakerIcon = pyg.image.load("SuryaAssets/DrumsLogo.png")
         self.beatmakerIcon = pyg.transform.scale(self.beatmakerIcon, (40, 40))
+        self.GameCentreIcon = pyg.image.load("SuryaAssets/My Project.png")
+        self.GameCentreIcon = pyg.transform.scale(self.GameCentreIcon, (40, 40))
         self.pTime = 0
         self.microphoneRect = pyg.Rect(320, 52, 25, 20)
         self.x = y = 0
@@ -36,7 +38,8 @@ class homeScreen:
         self.GoogleListener = True
         self.AppRects = [pyg.Rect(50, self.height//2, 40, 40),
                          pyg.Rect(100, self.height//2, 40, 40),
-                         pyg.Rect(150, self.height//2, 40, 40)]
+                         pyg.Rect(150, self.height//2, 40, 40),
+                         pyg.Rect(200, self.height//2, 40, 40)]
         
         #self.g =  threading.Thread(target=(server1.function(),)).start()
         
@@ -154,6 +157,8 @@ class homeScreen:
             self.window.blit(self.calculatorIcon, self.AppRects[1])
             pyg.draw.rect(self.window, (255, 255, 255), self.AppRects[2])
             self.window.blit(self.beatmakerIcon, self.AppRects[2])
+            self.window.blit(self.GameCentreIcon, self.AppRects[3])
+        
             self.a1 = self.a
             if self.run1 == "chatApp":
                 print("hello")
@@ -177,6 +182,15 @@ class homeScreen:
                 self.window = pyg.display.set_mode((self.width, self.height))
                 self.run1 = False
                 self.GoogleListener = True
+            
+            if self.run1 == "game Centre":
+                print("hello")
+                self.GoogleListener = False
+                main1.mainMenu()
+                self.window = pyg.display.set_mode((self.width, self.height))
+                self.run1 = False
+                self.GoogleListener = True
+            
             
             
             if self.a or self.a1:
