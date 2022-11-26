@@ -1,7 +1,7 @@
 import pygame as pyg
 import sys
 import mysql.connector
-mydb = mysql.connector.connect(host="localhost", password="S********123")
+mydb = mysql.connector.connect(host="localhost", user = "root", password="S********123")
 
 
 class BeatSequencer:
@@ -10,20 +10,30 @@ class BeatSequencer:
     # loading the contents of the database as a constructor
     def __init__(self):
         self.cursor = mydb.cursor()
-        self.cursor.execute("show databases")
-        databases = self.cursor.fetchall()
-        if ('BeatMakerSettings',) in databases:
+        try:
             self.cursor.execute("use BeatMakerSettings")
+            self.cursor.execute("drop database BeatMakerSettings")
+        except:
+            self.cursor.execute("create database BeatMakerSettings")
+            self.cursor.execute("use BeatMakerSettings")
+            self.cursor.execute("create table Options(OptionName varchar(50), Setting varchar(20))")
+            self.cursor.execute("insert into Options values('BPM',              120)")
+            self.cursor.execute("insert into Options values('Beats Per Cycle',    6)")
+            self.cursor.execute("insert into Options values('Pause/Play',       'p')")
+            self.cursor.execute("insert into Options values('Open Options',     'o')")
+            self.cursor.execute("insert into Options values('clear the screen', 'c')")
+            self.cursor.execute("commit")
         else:
             self.cursor.execute("create database BeatMakerSettings")
+            self.cursor.execute("use BeatMakerSettings")
             self.cursor.execute("create table Options(OptionName varchar(50), Setting varchar(20))")
-            self.cursor.execute("insert into Options('BPM',              120")
-            self.cursor.execute("insert into Options('Beats Per Cycle',  6  ")
-            self.cursor.execute("insert into Options('Pause/Play',       p  ")
-            self.cursor.execute("insert into Options('Open Options',     o  ")
-            self.cursor.execute("insert into Options('clear the screen', c  ")
-            self.cursor.execute("insert into Options('save',             s  ")
-        self.cursor.execute("select * from options")    
+            self.cursor.execute("insert into Options values('BPM',              120)")
+            self.cursor.execute("insert into Options values('Beats Per Cycle',    6)")
+            self.cursor.execute("insert into Options values('Pause/Play',       'p')")
+            self.cursor.execute("insert into Options values('Open Options',     'o')")
+            self.cursor.execute("insert into Options values('clear the screen', 'c')")
+            self.cursor.execute("commit")
+        self.cursor.execute("select * from Options")    
         self.options = self.cursor.fetchall()
         self.menu()
     
@@ -215,9 +225,6 @@ class BeatSequencer:
                         for j, list in enumerate(flagList):
                             for i in range(no_beats):
                                 list.append(False)
-                    text = eval('pyg.K_'+self.options[5][-1])
-                    if event.key == text:
-                        pass
                     
                 # If we press any thing ok our key board when the options window is not open
                 if run1:

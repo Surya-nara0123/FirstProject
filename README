@@ -1,3 +1,13 @@
 Libraries Used:
 	NEAT
 	Pygame
+	Opencv-contrib-python
+	pyjokes
+	pyttsx3
+	mysql.connector
+	SpeechRecognitions
+	
+
+Thing to check before running in new computer:
+	phoneHomeScreen.py --------> line 48 - (len(sr.Microphone.list_microphone_names())-1 ======> 0)
+	BeatMaker.py --------------> line 4  - (password="S********123" =========> password="1234")

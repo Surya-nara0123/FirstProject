@@ -962,7 +962,7 @@ def base():
         pygame.display.update()
 functionCalls = [gst,calc,age,Time,base,data,discount,bmi,equation]
 def main():
-    global SCREEN1, blue, bgimage
+    global SCREEN1, blue, bgimage, dictList,DEFAULT_IMAGE_SIZE, h, action
     run1  = True
     pygame.init()
     WIDTH = 1000

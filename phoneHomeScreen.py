@@ -125,9 +125,34 @@ class homeScreen:
                     self.a1 = True
                     self.a = True
                     self.select = False
-            
+                elif self.AppRects[0].collidepoint((self.width+100)*x, (self.height+100)*y):
+                    print("hello")
+                    self.GoogleListener = False
+                    chatApp.run()
+                    self.run1 = False
+                    self.GoogleListener = True
+                    x = y = 0
+                elif self.AppRects[1].collidepoint((self.width+100)*x, (self.height+100)*y):
+                    print("hello")
+                    self.GoogleListener = False
+                    Final.main()
+                    self.window = pyg.display.set_mode((self.width, self.height))
+                    self.run1 = False
+                    self.GoogleListener = True
+                    x = y = 0
+                elif self.AppRects[2].collidepoint((self.width+100)*x, (self.height+100)*y):
+                    print("hello")
+                    self.GoogleListener = False
+                    Beatmaker.BeatSequencer()
+                    self.window = pyg.display.set_mode((self.width, self.height))
+                    self.run1 = False
+                    self.GoogleListener = True
+                    x = y = 0
+
+
             self.window.blit(self.chatsappIcon, self.AppRects[0])
             self.window.blit(self.calculatorIcon, self.AppRects[1])
+            pyg.draw.rect(self.window, (255, 255, 255), self.AppRects[2])
             self.window.blit(self.beatmakerIcon, self.AppRects[2])
             self.a1 = self.a
             if self.run1 == "chatApp":
