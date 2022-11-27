@@ -5,7 +5,7 @@ Libraries Used:
 	pyjokes
 	pyttsx3
 	mysql.connector
-	SpeechRecognitions
+	SpeechRecognition
 	
 
 Thing to check before running in new computer:
