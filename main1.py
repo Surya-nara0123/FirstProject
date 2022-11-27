@@ -1,5 +1,4 @@
 import pygame as pyg
-import sys
 from dinoAI import game as g1
 from dino import game as g2
 from FlappyBird import game as g3
@@ -8,8 +7,8 @@ from SuryaAssets import tictactoe
 game = tictactoe.game
 
 pyg.init()
-SCREEN_HEIGHT = 600
-SCREEN_WIDTH = 600
+SCREEN_HEIGHT = 900
+SCREEN_WIDTH = 800
 WINDOW = pyg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 icon = pyg.image.load('SuryaAssets/My project.png')
 pyg.display.set_icon(icon)
@@ -19,7 +18,8 @@ FONT = pyg.font.Font('freesansbold.ttf', 20)
 
 
 def mainMenu():
-    global WINDOW
+    WINDOW = pyg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    print("HELLO")
     clock = pyg.time.Clock()
     global run
     run = True
@@ -38,6 +38,7 @@ def mainMenu():
             pic.append(pyg.transform.scale(pyg.image.load('SuryaAssets/Flappy img.png'), box.size))
         else:
             pic.append(pyg.transform.scale(pyg.image.load('SuryaAssets/tictactoePic.png'), box.size))
+    print("HELLO")
     while run:
 
         WINDOW.fill((220, 255, 220))
@@ -86,5 +87,6 @@ def mainMenu():
         clock.tick(30)
         pyg.display.update()
 
-if  __name__ == "__name__":
+if  __name__ == "__main__":
+    
     mainMenu()

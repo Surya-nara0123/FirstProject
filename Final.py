@@ -21,17 +21,16 @@ def drawbutton(a,b,c):
     s = y.draw()
     return s
 def finalbutton(x,a,b):
-            aa_image = pygame.image.load(x)
-            aaimage = pygame.transform.scale(aa_image, (125,125))
-            n = drawbutton(a,b,aaimage)
-            return n
+    aa_image = pygame.image.load(x)
+    aaimage = pygame.transform.scale(aa_image, (125,125))
+    n = drawbutton(a,b,aaimage)
+    return n
 def word(x,y,a,b):
-                        font = pygame.font.Font('burnstown.ttf', y)
-                        textcd = font.render(x, True, (255,255,255))
-                        
-                        textRectcd = textcd.get_rect()
-                        textRectcd.center = (a,b)
-                        SCREEN1.blit(textcd, textRectcd)
+    font = pygame.font.Font('burnstown.ttf', y)
+    textcd = font.render(x, True, (255,255,255))
+    textRectcd = textcd.get_rect()
+    textRectcd.center = (a,b)
+    SCREEN1.blit(textcd, textRectcd)
 def disp():
         global dictList
         L = ['HariniAssets/1_button_image.png','HariniAssets/2_button_image.png','HariniAssets/3_button_image.png',
@@ -214,26 +213,42 @@ def gst():
     inputno = ''
     dis = ''
     global dictList
-    while run:   
+    l2 = disp()
+    outputbox = pygame.Rect(500,200,400,30)
+    inputbox = pygame.Rect(500,150,400,30)
+    while run:
+        SCREEN1.blit(bgimage,(0,0))
+        word('GST',75,500,100)
+        pygame.draw.rect(SCREEN1,(255,255,255),pygame.Rect(300,400,300,225))
+        word2('Original Price',30,100,150)
+        word2('GST',30,100,200)
+        word2('Final Price',30,100,250)
+        pygame.draw.rect(SCREEN1,blue,pygame.Rect(495,245,410,40))
+        pygame.draw.rect(SCREEN1,blue,pygame.Rect(495,145,410,40))
+        pygame.draw.rect(SCREEN1,blue,pygame.Rect(495,195,410,40))
+        pygame.draw.rect(SCREEN1,blue,pygame.Rect(290,390,320,245))
         pygame.draw.rect(SCREEN1,(255,255,255),pygame.Rect(500,250,400,30))
         pygame.draw.rect(SCREEN1,(255,255,255),pygame.Rect(500,150,400,30))
         pygame.draw.rect(SCREEN1,(255,255,255),pygame.Rect(500,200,400,30))
-        l2 = disp()
+        disp()
         for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
                     run1 = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if pygame.Rect(500,200,400,30).collidepoint(pygame.mouse.get_pos()):
+                    if outputbox.collidepoint(pygame.mouse.get_pos()):
                         option = 0
+                    if inputbox.collidepoint(pygame.mouse.get_pos()):
+                        option = 1
                     if option:     
                         for i in l2: 
                             if i.collidepoint(pygame.mouse.get_pos()):
-                                inputno += (dictList[l2.index(i)])
                                 if dictList[l2.index(i)] == 'back':
-                                    inputno = inputno[:-5]
-                                if dictList[l2.index(i)] == 'AC':
+                                    inputno = inputno[:-1]
+                                elif dictList[l2.index(i)] == 'AC':
                                     inputno = ''
+                                else:
+                                    inputno += (dictList[l2.index(i)])
                     if not option:
                         for i in l2: 
                             if i.collidepoint(pygame.mouse.get_pos()):

@@ -86,6 +86,8 @@ class homeScreen:
                                     self.run1 = "calculator"
                                 if 'beat maker' in self.command:
                                     self.run1 = "beatmaker"
+                                if 'game center' in self.command:
+                                    self.run1 = "game center"
 
                 except Exception as s:
                     print(s)
@@ -151,6 +153,14 @@ class homeScreen:
                     self.run1 = False
                     self.GoogleListener = True
                     x = y = 0
+                elif self.AppRects[3].collidepoint((self.width+100)*x, (self.height+100)*y):
+                    print("hello")
+                    self.GoogleListener = False
+                    main1.mainMenu()
+                    self.window = pyg.display.set_mode((self.width, self.height))
+                    self.run1 = False
+                    self.GoogleListener = True
+                    x = y = 0
 
 
             self.window.blit(self.chatsappIcon, self.AppRects[0])
@@ -183,7 +193,7 @@ class homeScreen:
                 self.run1 = False
                 self.GoogleListener = True
             
-            if self.run1 == "game Centre":
+            if self.run1 == "game centre":
                 print("hello")
                 self.GoogleListener = False
                 main1.mainMenu()

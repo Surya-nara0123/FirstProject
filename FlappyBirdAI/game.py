@@ -124,8 +124,6 @@ def evalGenomes(genomes, config):
         for event in pyg.event.get():
             if event.type == pyg.QUIT:
                 run = False
-                pyg.quit()
-                sys.exit()
 
         SCREEN.fill((255, 255, 255))
 

@@ -150,8 +150,6 @@ class Game:
             if self.checkWin(self.board):
                 print(self.checkWin(self.board))
                 self.run = False
-                pyg.quit()
-                sys.quit()
 
             self.drawBoard()
             self.drawPieces()
