@@ -1,4 +1,3 @@
-import random
 import pygame
 import math
 import datetime
@@ -109,9 +108,7 @@ def calc():
         # inputting values
         for event in pygame.event.get():
                 if event.type == pygame.QUIT:
-                
                     run = False
-                    run1 = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     for i in l2:
                         if i.collidepoint(pygame.mouse.get_pos()):
@@ -148,45 +145,134 @@ def calc():
                     s = processno.index(i)
                     if i == 'l'and processno[s+1] =='n':
                         f = processno.index(')',s)
-                        k = math.log(int(processno[s+3:f]))
-                        processno2 = processno[:s]+str(k)+processno[f+1:]
+                        k = math.log(float(processno[s+3:f]))
+                        if processno2 != '':
+                            if 'a' in processno[f+1:] or'S' in processno[f+1:] or 'T' in processno[f+1:] or 'C' in processno[f+1:] or 'l' in processno[f+1:] or '!' in processno[f+1:]:
+                                processno2 += processno[s-1]+str(k)
+                            else:
+                                processno2 += processno[s-1]+str(k)+processno[f+1:]
+                        else:
+                            if 'a' in processno[f+1:] or'S' in processno[f+1:] or 'T' in processno[f+1:] or 'C' in processno[f+1:] or 'l' in processno[f+1:] or '!' in processno[f+1:]:
+                                processno2 = processno[:s]+str(k)
+                            else:
+                                processno2 = processno[:s]+str(k)+processno[f+1:]
                     if i == 'l'and processno[s+1] =='g':
                         f = processno.index(')',s)
-                        k = math.log(int(processno[s+3:f]),10)
-                        processno2 = processno[:s]+str(k)+processno[f+1:]
+                        k = math.log(float(processno[s+3:f]),10)
+                        if processno2 != '':
+                            if 'a' in processno[f+1:] or'S' in processno[f+1:] or 'T' in processno[f+1:] or 'C' in processno[f+1:] or 'l' in processno[f+1:] or '!' in processno[f+1:]:
+                                processno2 += processno[s-1]+str(k)
+                            else:
+                                processno2 += processno[s-1]+str(k)+processno[f+1:]
+                        else:
+                            if 'a' in processno[f+1:] or'S' in processno[f+1:] or 'T' in processno[f+1:] or 'C' in processno[f+1:] or 'l' in processno[f+1:] or '!' in processno[f+1:]:
+                                processno2 = processno[:s]+str(k)
+                            else:
+                                processno2 = processno[:s]+str(k)+processno[f+1:]
                     if i == '!':
                         if processno[s-2].isnumeric():
-                            k = math.factorial(int(processno[s-2:s]))
-                            processno2 = processno[:s-2]+str(k)+processno[s+1:]
-                            print(processno2)
+                            k = math.factorial(float(processno[s-2:s]))
+                            if processno2 != '':
+                                if 'a' in processno[f+1:] or'S' in processno[f+1:] or 'T' in processno[f+1:] or 'C' in processno[f+1:] or 'l' in processno[f+1:] or '!' in processno[f+1:]:
+                                    processno2 += processno[s-3]+str(k)
+                                else:
+                                     processno2 += processno[s-3]+str(k)+processno[s+1:]
+                            else:
+                                if 'a' in processno[f+1:] or'S' in processno[f+1:] or 'T' in processno[f+1:] or 'C' in processno[f+1:] or 'l' in processno[f+1:] or '!' in processno[f+1:]:
+                                    processno2 = processno[:s-2]+str(k)
+                                else:
+                                    processno2 = processno[:s-2]+str(k)+processno[s+1:]
                         else:
-                            k = math.factorial(int(processno[s-1:s]))
-                            processno2 = processno[:s-1]+str(k)+processno[s+1:]
+                            k = math.factorial(float(processno[s-1:s]))
+                            if processno2 != '':
+                                if 'a' in processno[f+1:] or'S' in processno[f+1:] or 'T' in processno[f+1:] or 'C' in processno[f+1:] or 'l' in processno[f+1:] or '!' in processno[f+1:]:
+                                    processno2 += processno[s-2]+str(k)
+                                else:
+                                    processno2 += processno[s-2]+str(k)+processno[s+1:]
+                            else:
+                                if 'a' in processno[f+1:] or'S' in processno[f+1:] or 'T' in processno[f+1:] or 'C' in processno[f+1:] or 'l' in processno[f+1:] or '!' in processno[f+1:]:
+                                    processno2 = processno[:s-1]+str(k)
+                                else:
+                                    processno2 = processno[:s-1]+str(k)+processno[s+1:]
                     if i=='a' and processno[s+1] == 's':
                         s = processno.index(i)
                         f = processno.index(')',s)
-                        k = math.asin(int(processno[s+5:f]))
-                        processno2 = processno[:s]+str(k)+processno[f+1:]
+                        k = math.asin(float(processno[s+5:f]))
+                        if processno2 != '':
+                            if 'a' in processno[f+1:] or'S' in processno[f+1:] or 'T' in processno[f+1:] or 'C' in processno[f+1:] or 'l' in processno[f+1:] or '!' in processno[f+1:]:
+                                processno2 += processno[s-1]+str(k)
+                            else:
+                                processno2 += processno[s-1]+str(k)+processno[f+1:]
+                        else:
+                            if 'a' in processno[f+1:] or'S' in processno[f+1:] or 'T' in processno[f+1:] or 'C' in processno[f+1:] or 'l' in processno[f+1:] or '!' in processno[f+1:]:
+                                processno2 = processno[:s]+str(k)
+                            else:
+                                processno2 = processno[:s]+str(k)+processno[f+1:]
                     if i=='a' and processno[s+1] == 'c':
+                        s = processno.index(i)
                         f = processno.index(')',s)
-                        k = math.acos(int(processno[s+5:f]))
-                        processno2 = processno[:s]+str(k)+processno[f+1:]
+                        k = math.acos(float(processno[s+5:f]))
+                        if processno2 != '':
+                            if 'a' in processno[f+1:] or'S' in processno[f+1:] or 'T' in processno[f+1:] or 'C' in processno[f+1:] or 'l' in processno[f+1:] or '!' in processno[f+1:]:
+                                processno2 += processno[s-1]+str(k)
+                            else:
+                                processno2 += processno[s-1]+str(k)+processno[f+1:]
+                        else:
+                            if 'a' in processno[f+1:] or'S' in processno[f+1:] or 'T' in processno[f+1:] or 'C' in processno[f+1:] or 'l' in processno[f+1:] or '!' in processno[f+1:]:
+                                processno2 = processno[:s]+str(k)
+                            else:
+                                processno2 = processno[:s]+str(k)+processno[f+1:]
                     if i=='a' and processno[s+1] == 't':
+                        s = processno.index(i)
                         f = processno.index(')',s)
-                        k = math.atan(int(processno[s+5:f]))
-                        processno2 = processno[:s]+str(k)+processno[f+1:]
+                        k = math.atan(float(processno[s+5:f]))
+                        if processno2 != '':
+                            if 'a' in processno[f+1:] or'S' in processno[f+1:] or 'T' in processno[f+1:] or 'C' in processno[f+1:] or 'l' in processno[f+1:] or '!' in processno[f+1:]:
+                                processno2 += processno[s-1]+str(k)
+                            else:
+                                processno2 += processno[s-1]+str(k)+processno[f+1:]
+                        else:
+                            if 'a' in processno[f+1:] or'S' in processno[f+1:] or 'T' in processno[f+1:] or 'C' in processno[f+1:] or 'l' in processno[f+1:] or '!' in processno[f+1:]:
+                                processno2 = processno[:s]+str(k)
+                            else:
+                                processno2 = processno[:s]+str(k)+processno[f+1:]
                     if i=='S':
                         f = processno.index(')',s)
-                        k = math.sin(int(processno[s+4:f]))
-                        processno2 = processno[:s]+str(k)+processno[f+1:]
+                        k = math.sin(float(processno[s+4:f]))
+                        if processno2 != '':
+                            if 'a' in processno[f+1:] or'S' in processno[f+1:] or 'T' in processno[f+1:] or 'C' in processno[f+1:] or 'l' in processno[f+1:] or '!' in processno[f+1:]:
+                                processno2 += processno[s-1]+str(k)
+                            else:
+                                processno2 += processno[s-1]+str(k)+processno[f+1:]
+                        else:
+                            if 'a' in processno[f+1:] or'S' in processno[f+1:] or 'T' in processno[f+1:] or 'C' in processno[f+1:] or 'l' in processno[f+1:] or '!' in processno[f+1:]:
+                                processno2 = processno[:s]+str(k)
+                            else:
+                                processno2 = processno[:s]+str(k)+processno[f+1:]
                     if i=='C':
-                        f = processno.index(')',s)
-                        k = math.cos(int(processno[s+4:f]))
-                        processno2 = processno[:s]+str(k)+processno[f+1:]
+                        if processno2 != '':
+                            if 'a' in processno[f+1:] or'S' in processno[f+1:] or 'T' in processno[f+1:] or 'C' in processno[f+1:] or 'l' in processno[f+1:] or '!' in processno[f+1:]:
+                                processno2 += processno[s-1]+str(k)
+                            else:
+                                processno2 += processno[s-1]+str(k)+processno[f+1:]
+                        else:
+                            if 'a' in processno[f+1:] or'S' in processno[f+1:] or 'T' in processno[f+1:] or 'C' in processno[f+1:] or 'l' in processno[f+1:] or '!' in processno[f+1:]:
+                                processno2 = processno[:s]+str(k)
+                            else:
+                                processno2 = processno[:s]+str(k)+processno[f+1:]
                     if i=='T':
-                        f = processno.index(')',s)
-                        k = math.tan(int(processno[s+4:f]))
-                        processno2 = processno[:s]+str(k)+processno[f+1:]
+                        if processno2 != '':
+                            if 'a' in processno[f+1:] or'S' in processno[f+1:] or 'T' in processno[f+1:] or 'C' in processno[f+1:] or 'l' in processno[f+1:] or '!' in processno[f+1:]:
+                                processno2 += processno[s-1]+str(k)
+                            else:
+                                processno2 += processno[s-1]+str(k)+processno[f+1:]
+                        else:
+                            if 'a' in processno[f+1:] or'S' in processno[f+1:] or 'T' in processno[f+1:] or 'C' in processno[f+1:] or 'l' in processno[f+1:] or '!' in processno[f+1:]:
+                                processno2 = processno[:s]+str(k)
+                            else:
+                                processno2 = processno[:s]+str(k)+processno[f+1:]
+                
+                
                 if processno2 == '':
                     processno2 = processno
                 word2(str(eval(processno2)),30,540,200)
@@ -1015,5 +1101,4 @@ def main():
                     if buttonList[rect].collidepoint(pygame.mouse.get_pos()):
                         functionCalls[rect]()
 if __name__ == "__main__":
-    
     main()
