@@ -9,7 +9,7 @@ class homeScreen:
         self.webcam = cv2.VideoCapture(0)
         self.hand = handDetector.handDetector(maxhands=1)
         self.run = True
-        self.background = pyg.image.load(f"/Users/surya/Desktop/SuryaFolder/SuryaAssets/nature/Image_10.jpg")
+        self.background = pyg.image.load(f"SuryaAssets/nature/Image_10.jpg")
         self.googleWidget = pyg.image.load("SuryaAssets/googleWidget.png")
         self.googleWidget = pyg.transform.smoothscale(self.googleWidget, (self.width-50, self.height*(self.width/self.googleWidget.get_width())))
         self.background = pyg.transform.smoothscale(self.background, (self.width, self.height))

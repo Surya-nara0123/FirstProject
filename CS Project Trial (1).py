@@ -1,5 +1,4 @@
 import pygame
-import os
 import lock_screen
 import CS_project_clock
 from datetime import datetime

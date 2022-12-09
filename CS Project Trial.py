@@ -1,5 +1,5 @@
 import pygame
-import os, phoneHomeScreen
+import phoneHomeScreen
 from datetime import datetime
 clock=pygame.time.Clock()
 pygame.font.init()
