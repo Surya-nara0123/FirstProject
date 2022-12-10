@@ -144,6 +144,10 @@ class BeatSequencer:
                     text = font.render(user_text, True, (255, 255, 255))
                     pyg.draw.rect(window, (255, 255, 255), rectList1[flag-1][1], 4)
                     window.blit(text, rectList1[flag-1][1])
+            cursor = pyg.image.load("SuryaAssets/cursor.png")
+            cursor = pyg.transform.chop(cursor, (300, 400, 1000, 400))
+            cursor = pyg.transform.smoothscale(cursor, (50, 50))
+            window.blit(cursor, pyg.mouse.get_pos())
             pyg.display.update()
             clock.tick(60)
             
