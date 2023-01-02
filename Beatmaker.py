@@ -136,14 +136,6 @@ class BeatSequencer:
                 window.blit(heading,(0, 0))
                 for i, (name, setting) in enumerate(self.options):
                     heading = font.render(name, False, (255, 255, 255))
-                    window.blit(heading, rectList1[i][0])
-                    heading = font.render(setting, False, (255, 255, 255))
-                    window.blit(heading,rectList1[i][1])
-
-                if flag != 0:
-                    text = font.render(user_text, True, (255, 255, 255))
-                    pyg.draw.rect(window, (255, 255, 255), rectList1[flag-1][1], 4)
-                    window.blit(text, rectList1[flag-1][1])
             cursor = pyg.image.load("SuryaAssets/cursor.png")
             cursor = pyg.transform.chop(cursor, (300, 400, 1000, 400))
             cursor = pyg.transform.smoothscale(cursor, (50, 50))
